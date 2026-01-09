@@ -1,0 +1,94 @@
+import { useCallback, useRef, useMemo, useEffect } from 'react';
+import { View, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
+import { useQuery } from '@tanstack/react-query';
+import { messageQueries, ChatBubble, TypingIndicator } from '@/entities/message';
+import type { DisplayMessage, Message } from '@/entities/message';
+import { useSSE, ChatInput } from '@/features/send-message';
+import { Loading } from '@/shared/ui';
+import { asMessageId } from '@/shared/types';
+
+interface ChatRoomProps {
+  chatId: string;
+}
+
+export function ChatRoom({ chatId }: ChatRoomProps) {
+  const flatListRef = useRef<FlatList>(null);
+
+  const { data, isLoading } = useQuery(messageQueries.list(chatId));
+
+  const {
+    sendMessage,
+    isStreaming,
+    streamingText,
+    error,
+  } = useSSE(chatId, {
+    onComplete: () => {
+      // 스크롤 to bottom
+      setTimeout(() => {
+        flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+      }, 100);
+    },
+  });
+
+  // 메시지 목록 + 스트리밍 메시지 조합
+  const messages: DisplayMessage[] = useMemo(() => {
+    const baseMessages = data?.data || [];
+
+    if (isStreaming && streamingText) {
+      const streamingMessage: DisplayMessage = {
+        id: 'streaming',
+        role: 'assistant',
+        content: streamingText,
+        isStreaming: true,
+      };
+      return [streamingMessage, ...baseMessages];
+    }
+
+    return baseMessages;
+  }, [data?.data, isStreaming, streamingText]);
+
+  const handleSend = useCallback(
+    (content: string) => {
+      // Optimistic update: 사용자 메시지 즉시 표시
+      sendMessage(content);
+    },
+    [sendMessage]
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: DisplayMessage }) => <ChatBubble message={item} />,
+    []
+  );
+
+  const keyExtractor = useCallback(
+    (item: DisplayMessage) => item.id,
+    []
+  );
+
+  if (isLoading) {
+    return <Loading fullScreen message="메시지를 불러오는 중..." />;
+  }
+
+  return (
+    <KeyboardAvoidingView
+      className="flex-1 bg-white"
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+    >
+      <FlatList
+        ref={flatListRef}
+        data={messages}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        inverted
+        contentContainerStyle={{ padding: 16, paddingTop: 8 }}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          isStreaming && !streamingText ? <TypingIndicator /> : null
+        }
+      />
+
+      <ChatInput onSend={handleSend} disabled={isStreaming} />
+    </KeyboardAvoidingView>
+  );
+}
