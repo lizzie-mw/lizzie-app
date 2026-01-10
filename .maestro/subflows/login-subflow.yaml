@@ -1,0 +1,19 @@
+appId: app.lizzie
+name: "[Subflow] - Login Helper"
+---
+# =====================================================
+# 로그인 서브플로우
+# 다른 플로우에서 재사용 가능한 로그인 헬퍼
+# =====================================================
+
+# 로그인 화면 확인
+- assertVisible:
+    text: "Lizzie"
+
+# Google 로그인 버튼 탭
+- tapOn:
+    text: "Google로 계속하기"
+
+# 로딩 대기
+- waitForAnimationToEnd:
+    timeout: 5000

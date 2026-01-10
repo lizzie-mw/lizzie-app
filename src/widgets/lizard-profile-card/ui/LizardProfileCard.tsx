@@ -31,6 +31,7 @@ export function LizardProfileCard({
 
         {showEditButton && (
           <Pressable
+            testID="edit-lizard-button"
             className="p-2 rounded-full active:bg-gray-100"
             onPress={handleEdit}
           >

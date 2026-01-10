@@ -18,6 +18,8 @@ interface AuthActions {
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   clearError: () => void;
+  // 테스트용 Mock 로그인
+  mockSignIn: () => void;
 }
 
 type AuthStore = AuthState & AuthActions;
@@ -109,6 +111,31 @@ export const useAuthStore = create<AuthStore>()(
         clearError: () => {
           set((state) => {
             state.error = null;
+          });
+        },
+
+        // 테스트용 Mock 로그인 (E2E 테스트에서 사용)
+        mockSignIn: () => {
+          if (!__DEV__) return; // 프로덕션에서는 동작하지 않음
+
+          const mockUser = {
+            id: 'mock-user-id',
+            email: 'test@lizzie.app',
+            created_at: new Date().toISOString(),
+          } as User;
+
+          const mockSession = {
+            access_token: 'mock-access-token',
+            refresh_token: 'mock-refresh-token',
+            expires_at: Date.now() + 3600000,
+            user: mockUser,
+          } as Session;
+
+          set((state) => {
+            state.session = mockSession;
+            state.user = mockUser;
+            state.isLoading = false;
+            state.isInitialized = true;
           });
         },
       })),

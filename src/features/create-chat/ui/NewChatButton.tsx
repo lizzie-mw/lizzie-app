@@ -37,6 +37,7 @@ export function NewChatButton({
 
   return (
     <Pressable
+      testID="fab-new-chat"
       className={`
         w-14 h-14 rounded-full items-center justify-center
         shadow-lg

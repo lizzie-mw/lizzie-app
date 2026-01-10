@@ -1,0 +1,77 @@
+appId: app.lizzie
+name: "[Settings] - Settings Screen Navigation"
+tags:
+  - smoke
+  - regression
+  - settings
+---
+# =====================================================
+# 도마뱀 정보 편집 화면 테스트
+# 프로필 편집 버튼으로 진입하여 폼 요소 확인
+# =====================================================
+
+# 앱 시작 (상태 유지)
+- stopApp
+
+- launchApp:
+    clearState: false
+
+# 애니메이션 완료 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# 로그인 화면이면 Mock 로그인 수행
+- tapOn:
+    id: "login-mock-button"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# 홈 화면 확인
+- assertVisible:
+    id: "home-screen"
+
+# 스크린샷 - 홈 화면
+- takeScreenshot: "04-home-before-settings"
+
+# =====================================================
+# 도마뱀 정보 설정 화면 진입 (프로필 편집 버튼 사용)
+# =====================================================
+
+# 프로필 카드의 편집 버튼 탭
+- tapOn:
+    id: "edit-lizard-button"
+
+# 애니메이션 대기
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 도마뱀 정보 폼 확인 (testID 사용)
+- assertVisible:
+    text: "이름"
+    optional: true
+
+- assertVisible:
+    text: "종류"
+    optional: true
+
+- assertVisible:
+    text: "저장하기"
+    optional: true
+
+# 스크린샷 - 도마뱀 정보 설정
+- takeScreenshot: "04-lizard-settings"
+
+# 뒤로가기 (홈으로)
+- back
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 홈 화면 복귀 확인
+- assertVisible:
+    id: "home-screen"
+
+# 스크린샷 - 최종
+- takeScreenshot: "04-settings-final"

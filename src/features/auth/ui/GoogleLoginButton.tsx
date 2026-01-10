@@ -1,4 +1,4 @@
-import { Text, Image } from 'react-native';
+import { Text, View } from 'react-native';
 import { Button } from '@/shared/ui';
 import { useAuthStore } from '../model/authStore';
 
@@ -19,18 +19,17 @@ export function GoogleLoginButton({ onError }: GoogleLoginButtonProps) {
 
   return (
     <Button
+      testID="login-google-button"
       variant="outline"
       size="lg"
       fullWidth
       loading={isLoading}
       onPress={handlePress}
     >
-      <Image
-        source={require('../../../../assets/google-logo.png')}
-        className="w-5 h-5 mr-3"
-        defaultSource={require('../../../../assets/google-logo.png')}
-      />
-      <Text className="text-gray-900 font-medium">Google로 계속하기</Text>
+      <View className="flex-row items-center">
+        <Text className="text-lg mr-2">G</Text>
+        <Text className="text-gray-900 font-medium">Google로 계속하기</Text>
+      </View>
     </Button>
   );
 }

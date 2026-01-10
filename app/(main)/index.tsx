@@ -38,18 +38,29 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={['bottom']}>
+    <SafeAreaView testID="home-screen" className="flex-1 bg-gray-50" edges={['bottom']}>
+      {/* 설정 버튼 (헤더 영역) */}
+      <View className="flex-row justify-end px-4 pt-2">
+        <Pressable
+          testID="settings-button"
+          className="p-2"
+          onPress={handleSettingsPress}
+        >
+          <Text className="text-2xl">⚙️</Text>
+        </Pressable>
+      </View>
+
       <View className="flex-1">
         {/* 프로필 카드 */}
-        <View className="px-4 pt-2 pb-4">
+        <View testID="home-profile-card" className="px-4 pb-4">
           <LizardProfileCard lizard={lizard} />
         </View>
 
         {/* 채팅 목록 */}
-        <View className="flex-1 bg-white rounded-t-3xl">
+        <View testID="home-chat-list" className="flex-1 bg-white rounded-t-3xl">
           <View className="flex-row justify-between items-center px-4 py-3 border-b border-gray-100">
-            <Text className="text-lg font-semibold text-gray-900">대화</Text>
-            <Text className="text-sm text-gray-400">
+            <Text testID="home-chat-title" className="text-lg font-semibold text-gray-900">대화</Text>
+            <Text testID="home-chat-count" className="text-sm text-gray-400">
               {chats?.length || 0} / 5
             </Text>
           </View>
@@ -69,7 +80,7 @@ export default function HomeScreen() {
               contentContainerStyle={{ paddingBottom: 100 }}
             />
           ) : (
-            <View className="flex-1 items-center justify-center py-12">
+            <View testID="home-empty-state" className="flex-1 items-center justify-center py-12">
               <Text className="text-4xl mb-3">💬</Text>
               <Text className="text-gray-500 text-center">
                 아직 대화가 없어요{'\n'}새 대화를 시작해보세요!
@@ -86,14 +97,6 @@ export default function HomeScreen() {
           chatCount={chats?.length || 0}
         />
       </View>
-
-      {/* 설정 버튼 (헤더) */}
-      <Pressable
-        className="absolute top-2 right-4 p-2"
-        onPress={handleSettingsPress}
-      >
-        <Text className="text-2xl">⚙️</Text>
-      </Pressable>
     </SafeAreaView>
   );
 }

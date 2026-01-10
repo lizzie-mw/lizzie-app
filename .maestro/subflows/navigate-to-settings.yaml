@@ -1,0 +1,18 @@
+appId: app.lizzie
+name: "[Subflow] - Navigate to Settings"
+---
+# =====================================================
+# 설정 화면 이동 서브플로우
+# 홈에서 설정 화면으로 이동
+# =====================================================
+
+# 설정 버튼 탭
+- tapOn:
+    id: "settings-button"
+
+# 애니메이션 대기
+- waitForAnimationToEnd
+
+# 설정 화면 확인
+- assertVisible:
+    text: "도마뱀 정보"

@@ -1,0 +1,65 @@
+appId: app.lizzie
+name: "[Home] - Home Screen Navigation"
+tags:
+  - smoke
+  - regression
+  - navigation
+---
+# =====================================================
+# 홈 화면 네비게이션 테스트
+# 홈 화면의 주요 요소 확인 및 네비게이션 동작 검증
+# =====================================================
+
+# 앱 시작
+- stopApp
+
+- launchApp:
+    clearState: false
+
+# 애니메이션 완료 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# 로그인 화면이면 Mock 로그인 수행
+- tapOn:
+    id: "login-mock-button"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 홈 화면 요소 확인 (testID 기반)
+# =====================================================
+
+# 홈 화면 확인
+- assertVisible:
+    id: "home-screen"
+
+# 프로필 카드 확인
+- assertVisible:
+    id: "home-profile-card"
+
+# 대화 섹션 타이틀
+- assertVisible:
+    id: "home-chat-title"
+
+# 채팅 카운터
+- assertVisible:
+    id: "home-chat-count"
+
+# 설정 버튼 확인
+- assertVisible:
+    id: "settings-button"
+
+# FAB 버튼 확인
+- assertVisible:
+    id: "fab-new-chat"
+
+# 빈 상태 확인 (새로 로그인한 경우)
+- assertVisible:
+    id: "home-empty-state"
+    optional: true
+
+# 스크린샷 - 홈 화면
+- takeScreenshot: "03-home-screen"

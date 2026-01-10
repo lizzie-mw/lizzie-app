@@ -1,9 +1,2 @@
 {
-  "enabledPlugins": {
-    "common-skills@ddingg-marketplace": true,
-    "react-native@ddingg-marketplace": true,
-    "pr-agents@ddingg-marketplace": true,
-    "react-native-test-maestro@ddingg-marketplace": true,
-    "utils@ddingg-marketplace": true
-  }
 }

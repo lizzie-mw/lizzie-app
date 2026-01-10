@@ -1,0 +1,64 @@
+appId: app.lizzie
+name: "[Auth] - Login Flow with Google"
+tags:
+  - smoke
+  - regression
+  - auth
+---
+# =====================================================
+# 로그인 플로우 테스트
+# Google 로그인 버튼 탭 후 인증 플로우 진행
+# =====================================================
+
+# 앱 시작
+- stopApp
+
+- launchApp:
+    clearState: false
+
+# 애니메이션 완료 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# 로그인 화면 확인
+- assertVisible:
+    id: "login-screen"
+
+- assertVisible:
+    id: "login-google-button"
+
+# 스크린샷 - 로그인 전
+- takeScreenshot: "02-before-login"
+
+# DEV: Mock 로그인 버튼 탭 (개발 환경에서만 표시)
+- tapOn:
+    id: "login-mock-button"
+
+# 로딩 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# 스크린샷 - Mock 로그인 후
+- takeScreenshot: "02-after-mock-login"
+
+# =====================================================
+# 홈 화면 검증 (Mock 로그인 성공 후)
+# =====================================================
+
+# 홈 화면 확인
+- assertVisible:
+    id: "home-screen"
+    optional: true
+
+# 대화 섹션 확인
+- assertVisible:
+    id: "home-chat-title"
+    optional: true
+
+# 빈 상태 또는 채팅 목록 확인
+- assertVisible:
+    id: "home-empty-state"
+    optional: true
+
+# 스크린샷 - 홈 화면
+- takeScreenshot: "02-home-screen"

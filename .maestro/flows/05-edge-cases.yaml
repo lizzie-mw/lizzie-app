@@ -1,0 +1,73 @@
+appId: app.lizzie
+name: "[Edge] - Edge Cases and Error Handling"
+tags:
+  - regression
+  - edge-cases
+---
+# =====================================================
+# Edge Case 테스트
+# 빈 상태, 초기 상태 테스트
+# =====================================================
+
+# 앱 시작 (깨끗한 상태)
+- stopApp
+
+- launchApp:
+    clearState: true
+
+# 애니메이션 완료 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 1. 로그인 화면 확인
+# =====================================================
+
+# 로그인 화면 확인 (testID 사용)
+- assertVisible:
+    id: "login-screen"
+
+- assertVisible:
+    id: "login-google-button"
+
+# 스크린샷 - 초기 상태
+- takeScreenshot: "05-edge-initial"
+
+# =====================================================
+# 2. Mock 로그인 후 홈 화면 확인
+# =====================================================
+
+# Mock 로그인 수행
+- tapOn:
+    id: "login-mock-button"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# 홈 화면 확인
+- assertVisible:
+    id: "home-screen"
+
+# 빈 채팅 목록 메시지 확인 (채팅이 없을 때)
+- assertVisible:
+    id: "home-empty-state"
+    optional: true
+
+# 스크린샷 - 빈 상태
+- takeScreenshot: "05-edge-empty-chats"
+
+# =====================================================
+# 3. 채팅 카운트 확인
+# =====================================================
+
+# 채팅 카운트 표시 확인
+- assertVisible:
+    id: "home-chat-count"
+
+# FAB 버튼 확인
+- assertVisible:
+    id: "fab-new-chat"
+    optional: true
+
+# 스크린샷 - 최종
+- takeScreenshot: "05-edge-final"

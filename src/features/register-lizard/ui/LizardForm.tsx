@@ -34,6 +34,7 @@ export function LizardForm() {
 
   return (
     <ScrollView
+      testID="lizard-form"
       className="flex-1"
       contentContainerClassName="p-6"
       keyboardShouldPersistTaps="handled"
@@ -51,6 +52,7 @@ export function LizardForm() {
           name="name"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              testID="input-lizard-name"
               label="이름 *"
               placeholder="도마뱀 이름을 입력하세요"
               value={value}
@@ -66,6 +68,7 @@ export function LizardForm() {
           name="species"
           render={({ field: { onChange, value } }) => (
             <Select
+              testID="select-species"
               label="종류 *"
               placeholder="종류를 선택하세요"
               options={SPECIES_OPTIONS}
@@ -129,6 +132,7 @@ export function LizardForm() {
 
       <View className="mt-8">
         <Button
+          testID="button-register-lizard"
           size="lg"
           fullWidth
           loading={isRegistering}

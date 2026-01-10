@@ -7,7 +7,8 @@ interface Option {
   value: string;
 }
 
-interface SelectProps {
+export interface SelectProps {
+  testID?: string;
   label?: string;
   placeholder?: string;
   options: readonly Option[];
@@ -17,6 +18,7 @@ interface SelectProps {
 }
 
 export function Select({
+  testID,
   label,
   placeholder = '선택하세요',
   options,
@@ -43,6 +45,7 @@ export function Select({
       )}
 
       <Pressable
+        testID={testID}
         className={`
           w-full px-4 py-3 rounded-xl
           bg-gray-50 border flex-row justify-between items-center

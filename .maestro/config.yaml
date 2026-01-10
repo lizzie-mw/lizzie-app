@@ -1,0 +1,27 @@
+# Maestro E2E Test Configuration
+# https://maestro.mobile.dev/
+
+# 기본 앱 설정
+appId: app.lizzie
+
+# 테스트 실행 설정
+flows:
+  - "flows/*.yaml"
+
+# 서브플로우 경로
+includeTags: []
+excludeTags: []
+
+# 기본 대기 시간 (ms)
+defaultTimeout: 10000
+
+# 스크린샷 저장 경로
+screenshotDir: ./screenshots
+
+# 로그 설정
+logLevel: info
+
+# 환경 변수 (테스트용)
+env:
+  APP_ID: app.lizzie
+  TEST_MODE: "true"

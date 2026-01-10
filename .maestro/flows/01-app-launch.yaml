@@ -1,0 +1,42 @@
+appId: app.lizzie
+name: "[Launch] - App Launch and Initial Screen"
+tags:
+  - smoke
+  - regression
+---
+# =====================================================
+# 앱 실행 테스트
+# 앱이 정상적으로 시작되고 로그인 화면이 표시되는지 확인
+# =====================================================
+
+# 앱 중지 후 재시작
+- stopApp
+
+- launchApp:
+    clearState: false
+
+# 애니메이션 완료 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# 로그인 화면 검증 (testID 기반)
+- assertVisible:
+    id: "login-screen"
+
+- assertVisible:
+    id: "login-logo"
+
+- assertVisible:
+    id: "login-title"
+
+- assertVisible:
+    id: "login-description"
+
+- assertVisible:
+    id: "login-google-button"
+
+- assertVisible:
+    id: "login-terms"
+
+# 스크린샷 저장
+- takeScreenshot: "01-login-screen"
