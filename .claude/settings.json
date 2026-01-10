@@ -1,2 +1,6 @@
 {
+  "enabledPlugins": {
+    "react-native@ddingg-marketplace": true,
+    "react-native-test-maestro@ddingg-marketplace": true
+  }
 }
