@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Alert } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Select } from '@/shared/ui';
-import { SPECIES_OPTIONS, PERSONALITY_OPTIONS } from '@/shared/constants';
+import { SPECIES_OPTIONS, PERSONALITY_OPTIONS, GENDER_OPTIONS } from '@/shared/constants';
 import { lizardSchema, type LizardFormData } from '../model/lizardSchema';
 import { useRegisterLizard } from '../model/useRegisterLizard';
 
@@ -22,8 +22,8 @@ export function LizardForm() {
     defaultValues: {
       name: '',
       species: undefined,
-      morph: '',
-      age_months: undefined,
+      birth_date: '',
+      gender: undefined,
       personality: undefined,
     },
   });
@@ -81,35 +81,32 @@ export function LizardForm() {
 
         <Controller
           control={control}
-          name="morph"
+          name="birth_date"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label="모프 (선택)"
-              placeholder="예: 탱제린, 블리자드"
+              testID="input-birth-date"
+              label="생년월 *"
+              placeholder="YYYY-MM 형식으로 입력하세요"
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              error={errors.morph?.message}
+              error={errors.birth_date?.message}
+              hint="예: 2023-01"
             />
           )}
         />
 
         <Controller
           control={control}
-          name="age_months"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              label="나이 (개월)"
-              placeholder="개월 수로 입력하세요"
-              keyboardType="numeric"
-              value={value?.toString() || ''}
-              onChangeText={(text) => {
-                const num = parseInt(text, 10);
-                onChange(isNaN(num) ? undefined : num);
-              }}
-              onBlur={onBlur}
-              error={errors.age_months?.message}
-              hint="예: 12개월 = 1살"
+          name="gender"
+          render={({ field: { onChange, value } }) => (
+            <Select
+              label="성별 (선택)"
+              placeholder="성별을 선택하세요"
+              options={GENDER_OPTIONS}
+              value={value ?? undefined}
+              onChange={onChange}
+              error={errors.gender?.message}
             />
           )}
         />
@@ -122,7 +119,7 @@ export function LizardForm() {
               label="성격 (선택)"
               placeholder="성격을 선택하세요"
               options={PERSONALITY_OPTIONS}
-              value={value}
+              value={value ?? undefined}
               onChange={onChange}
               error={errors.personality?.message}
             />

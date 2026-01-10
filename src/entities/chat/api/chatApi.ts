@@ -1,26 +1,18 @@
 import { apiClient } from '@/shared/api';
-import type { Chat, ChatCreate } from '../model/types';
+import type { ChatResponse, ChatCreate, ChatListResponse } from '@/shared/api';
 
 export const chatApi = {
-  getChats: async (lizardId: string): Promise<Chat[]> => {
+  getChats: async (lizardId: string): Promise<ChatResponse[]> => {
     const response = await apiClient
-      .get('chats', { searchParams: { lizard_id: lizardId } })
-      .json<{ data: Chat[] }>();
+      .get(`lizards/${lizardId}/chats`)
+      .json<ChatListResponse>();
     return response.data;
   },
 
-  getChat: async (chatId: string): Promise<Chat> => {
-    return await apiClient.get(`chats/${chatId}`).json<Chat>();
-  },
-
-  createChat: async (payload: ChatCreate): Promise<Chat> => {
-    return await apiClient.post('chats', { json: payload }).json<Chat>();
-  },
-
-  updateChatTitle: async (chatId: string, title: string): Promise<Chat> => {
+  createChat: async (lizardId: string, payload: ChatCreate): Promise<ChatResponse> => {
     return await apiClient
-      .patch(`chats/${chatId}`, { json: { title } })
-      .json<Chat>();
+      .post(`lizards/${lizardId}/chats`, { json: payload })
+      .json<ChatResponse>();
   },
 
   deleteChat: async (chatId: string): Promise<void> => {

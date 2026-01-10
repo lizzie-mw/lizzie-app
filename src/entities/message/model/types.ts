@@ -1,28 +1,25 @@
-import type { MessageId, ChatId, DateString } from '@/shared/types';
+import type { MessageResponse } from '@/shared/api';
 
+// Re-export API types
+export type Message = MessageResponse;
+
+// Message role type
 export type MessageRole = 'user' | 'assistant' | 'system';
 
-export interface Message {
-  id: MessageId;
-  chat_id: ChatId;
-  role: MessageRole;
+// Base message interface
+interface BaseMessage {
+  id: string;
   content: string;
-  created_at: DateString;
+  created_at: string;
 }
 
 // Discriminated Union for display messages
-export interface UserMessage {
-  id: MessageId;
+export interface UserMessage extends BaseMessage {
   role: 'user';
-  content: string;
-  created_at: DateString;
 }
 
-export interface AssistantMessage {
-  id: MessageId;
+export interface AssistantMessage extends BaseMessage {
   role: 'assistant';
-  content: string;
-  created_at: DateString;
 }
 
 export interface StreamingMessage {
@@ -39,12 +36,26 @@ export function isStreamingMessage(msg: DisplayMessage): msg is StreamingMessage
   return 'isStreaming' in msg && msg.isStreaming === true;
 }
 
-export interface MessageCreate {
-  chat_id: string;
-  content: string;
+// Helper to convert API message to display message
+export function toDisplayMessage(msg: Message): DisplayMessage | null {
+  if (msg.role === 'user') {
+    return {
+      id: msg.id,
+      role: 'user',
+      content: msg.content,
+      created_at: msg.created_at,
+    };
+  }
+  if (msg.role === 'assistant') {
+    return {
+      id: msg.id,
+      role: 'assistant',
+      content: msg.content,
+      created_at: msg.created_at,
+    };
+  }
+  return null;
 }
 
-export interface MessagesResponse {
-  data: Message[];
-  has_more: boolean;
-}
+// Re-export MessagesResponse from messageApi
+export type { MessagesResponse } from '../api/messageApi';

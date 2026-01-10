@@ -7,7 +7,7 @@ import { lizardQueries, lizardKeys, lizardApi } from '@/entities/lizard';
 import { lizardSchema, type LizardFormData } from '@/features/register-lizard';
 import { ImagePicker } from '@/features/upload-image';
 import { Button, Input, Select, Loading } from '@/shared/ui';
-import { SPECIES_OPTIONS, PERSONALITY_OPTIONS } from '@/shared/constants';
+import { SPECIES_OPTIONS, PERSONALITY_OPTIONS, GENDER_OPTIONS } from '@/shared/constants';
 import { haptics } from '@/shared/lib';
 
 export default function LizardSettingsScreen() {
@@ -38,9 +38,9 @@ export default function LizardSettingsScreen() {
       ? {
           name: lizard.name,
           species: lizard.species,
-          morph: lizard.morph || '',
-          age_months: lizard.age_months,
-          personality: lizard.personality,
+          birth_date: lizard.birth_date || '',
+          gender: lizard.gender as LizardFormData['gender'],
+          personality: lizard.personality as LizardFormData['personality'],
         }
       : undefined,
   });
@@ -64,7 +64,7 @@ export default function LizardSettingsScreen() {
         <View className="items-center mb-8">
           <ImagePicker
             lizardId={lizard.id}
-            currentImageUrl={lizard.image_url}
+            currentImageUrl={lizard.profile_image_url}
             lizardName={lizard.name}
             size="xl"
           />
@@ -105,33 +105,29 @@ export default function LizardSettingsScreen() {
 
           <Controller
             control={control}
-            name="morph"
+            name="birth_date"
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
-                label="모프"
-                placeholder="예: 탱제린, 블리자드"
+                label="생년월 (YYYY-MM)"
+                placeholder="예: 2023-01"
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
-                error={errors.morph?.message}
+                error={errors.birth_date?.message}
               />
             )}
           />
 
           <Controller
             control={control}
-            name="age_months"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label="나이 (개월)"
-                keyboardType="numeric"
-                value={value?.toString() || ''}
-                onChangeText={(text) => {
-                  const num = parseInt(text, 10);
-                  onChange(isNaN(num) ? undefined : num);
-                }}
-                onBlur={onBlur}
-                error={errors.age_months?.message}
+            name="gender"
+            render={({ field: { onChange, value } }) => (
+              <Select
+                label="성별"
+                options={GENDER_OPTIONS}
+                value={value || undefined}
+                onChange={onChange}
+                error={errors.gender?.message}
               />
             )}
           />
@@ -143,7 +139,7 @@ export default function LizardSettingsScreen() {
               <Select
                 label="성격"
                 options={PERSONALITY_OPTIONS}
-                value={value}
+                value={value || undefined}
                 onChange={onChange}
                 error={errors.personality?.message}
               />

@@ -6,8 +6,6 @@ export const messageKeys = {
   all: ['message'] as const,
   lists: () => [...messageKeys.all, 'list'] as const,
   list: (chatId: string) => [...messageKeys.lists(), chatId] as const,
-  details: () => [...messageKeys.all, 'detail'] as const,
-  detail: (messageId: string) => [...messageKeys.details(), messageId] as const,
 };
 
 // Query Options Factory
@@ -28,19 +26,12 @@ export const messageQueries = {
           before: pageParam,
         }),
       initialPageParam: undefined as string | undefined,
-      getNextPageParam: (lastPage, pages) => {
+      getNextPageParam: (lastPage) => {
         if (!lastPage.has_more || lastPage.data.length === 0) {
           return undefined;
         }
         return lastPage.data[lastPage.data.length - 1]?.id;
       },
       enabled: !!chatId,
-    }),
-
-  detail: (messageId: string) =>
-    queryOptions({
-      queryKey: messageKeys.detail(messageId),
-      queryFn: () => messageApi.getMessage(messageId),
-      enabled: !!messageId,
     }),
 };

@@ -3,6 +3,7 @@ import { SPECIES_OPTIONS, PERSONALITY_OPTIONS } from '@/shared/constants';
 
 const speciesValues = SPECIES_OPTIONS.map((opt) => opt.value) as [string, ...string[]];
 const personalityValues = PERSONALITY_OPTIONS.map((opt) => opt.value) as [string, ...string[]];
+const genderValues = ['male', 'female', 'unknown'] as const;
 
 export const lizardSchema = z.object({
   name: z
@@ -12,14 +13,11 @@ export const lizardSchema = z.object({
   species: z.enum(speciesValues, {
     errorMap: () => ({ message: '종류를 선택해주세요' }),
   }),
-  morph: z.string().max(50, '모프는 50자 이하로 입력해주세요').optional(),
-  age_months: z
-    .number()
-    .int()
-    .min(0, '올바른 나이를 입력해주세요')
-    .max(600, '올바른 나이를 입력해주세요')
-    .optional(),
-  personality: z.enum(personalityValues).optional(),
+  birth_date: z
+    .string()
+    .regex(/^\d{4}-\d{2}$/, '생년월을 YYYY-MM 형식으로 입력해주세요'),
+  gender: z.enum(genderValues).optional().nullable(),
+  personality: z.enum(personalityValues).optional().nullable(),
 });
 
 export type LizardFormData = z.infer<typeof lizardSchema>;

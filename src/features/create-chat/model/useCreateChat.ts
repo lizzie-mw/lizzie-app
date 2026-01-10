@@ -13,7 +13,7 @@ export function useCreateChat(lizardId: string, options: UseCreateChatOptions = 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: () => chatApi.createChat({ lizard_id: lizardId }),
+    mutationFn: () => chatApi.createChat(lizardId, {}),
     onSuccess: (chat) => {
       haptics.success();
 
@@ -25,7 +25,10 @@ export function useCreateChat(lizardId: string, options: UseCreateChatOptions = 
       options.onSuccess?.();
 
       // 새 채팅방으로 이동
-      router.push(`/chat/${chat.id}`);
+      router.push({
+        pathname: '/chat/[chatId]',
+        params: { chatId: chat.id },
+      });
     },
     onError: (error: Error) => {
       haptics.error();

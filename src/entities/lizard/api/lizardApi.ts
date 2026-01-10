@@ -1,24 +1,32 @@
 import { apiClient } from '@/shared/api';
-import type { Lizard, LizardCreate, LizardUpdate } from '../model/types';
+import type {
+  LizardResponse,
+  LizardCreate,
+  LizardUpdate,
+  ImageUploadResponse,
+} from '@/shared/api';
 
 export const lizardApi = {
-  getMyLizard: async (): Promise<Lizard | null> => {
+  getMyLizard: async (): Promise<LizardResponse | null> => {
     try {
-      return await apiClient.get('lizards/me').json<Lizard>();
-    } catch (error: any) {
-      if (error.response?.status === 404) {
-        return null;
+      return await apiClient.get('lizards/me').json<LizardResponse>();
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const httpError = error as { response?: { status?: number } };
+        if (httpError.response?.status === 404) {
+          return null;
+        }
       }
       throw error;
     }
   },
 
-  createLizard: async (payload: LizardCreate): Promise<Lizard> => {
-    return await apiClient.post('lizards', { json: payload }).json<Lizard>();
+  createLizard: async (payload: LizardCreate): Promise<LizardResponse> => {
+    return await apiClient.post('lizards', { json: payload }).json<LizardResponse>();
   },
 
-  updateLizard: async (id: string, payload: LizardUpdate): Promise<Lizard> => {
-    return await apiClient.patch(`lizards/${id}`, { json: payload }).json<Lizard>();
+  updateLizard: async (id: string, payload: LizardUpdate): Promise<LizardResponse> => {
+    return await apiClient.patch(`lizards/${id}`, { json: payload }).json<LizardResponse>();
   },
 
   deleteLizard: async (id: string): Promise<void> => {
@@ -28,12 +36,12 @@ export const lizardApi = {
   getImageUploadUrl: async (
     id: string,
     contentType: string
-  ): Promise<{ upload_url: string; image_url: string }> => {
+  ): Promise<ImageUploadResponse> => {
     return await apiClient
       .post(`lizards/${id}/image/presigned-url`, {
         json: { content_type: contentType },
       })
-      .json();
+      .json<ImageUploadResponse>();
   },
 
   updateImageUrl: async (id: string, imageUrl: string): Promise<void> => {

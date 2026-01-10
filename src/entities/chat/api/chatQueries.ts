@@ -1,14 +1,12 @@
 import { queryOptions } from '@tanstack/react-query';
 import { chatApi } from './chatApi';
-import type { ChatCreate } from '../model/types';
+import type { ChatCreate } from '@/shared/api';
 
 // Query Key Factory
 export const chatKeys = {
   all: ['chat'] as const,
   lists: () => [...chatKeys.all, 'list'] as const,
   list: (lizardId: string) => [...chatKeys.lists(), lizardId] as const,
-  details: () => [...chatKeys.all, 'detail'] as const,
-  detail: (chatId: string) => [...chatKeys.details(), chatId] as const,
 };
 
 // Query Options Factory
@@ -19,24 +17,13 @@ export const chatQueries = {
       queryFn: () => chatApi.getChats(lizardId),
       enabled: !!lizardId,
     }),
-
-  detail: (chatId: string) =>
-    queryOptions({
-      queryKey: chatKeys.detail(chatId),
-      queryFn: () => chatApi.getChat(chatId),
-      enabled: !!chatId,
-    }),
 };
 
 // Mutation Options
 export const chatMutations = {
   create: {
-    mutationFn: (data: ChatCreate) => chatApi.createChat(data),
-  },
-
-  updateTitle: {
-    mutationFn: ({ chatId, title }: { chatId: string; title: string }) =>
-      chatApi.updateChatTitle(chatId, title),
+    mutationFn: ({ lizardId, data }: { lizardId: string; data: ChatCreate }) =>
+      chatApi.createChat(lizardId, data),
   },
 
   delete: {

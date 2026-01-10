@@ -1,5 +1,9 @@
 import { apiClient } from '@/shared/api';
-import type { Message, MessagesResponse } from '../model/types';
+import type { MessageListResponse } from '@/shared/api';
+
+export interface MessagesResponse extends MessageListResponse {
+  has_more: boolean;
+}
 
 export const messageApi = {
   getMessages: async (
@@ -18,9 +22,5 @@ export const messageApi = {
     return await apiClient
       .get(`chats/${chatId}/messages`, { searchParams })
       .json<MessagesResponse>();
-  },
-
-  getMessage: async (messageId: string): Promise<Message> => {
-    return await apiClient.get(`messages/${messageId}`).json<Message>();
   },
 };

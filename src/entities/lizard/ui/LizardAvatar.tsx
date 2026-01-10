@@ -9,7 +9,7 @@ interface LizardAvatarProps {
 export function LizardAvatar({ lizard, size = 'md' }: LizardAvatarProps) {
   return (
     <Avatar
-      uri={lizard?.image_url}
+      uri={lizard?.profile_image_url}
       name={lizard?.name}
       size={size}
     />

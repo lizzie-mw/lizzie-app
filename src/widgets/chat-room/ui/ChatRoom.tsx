@@ -1,11 +1,10 @@
-import { useCallback, useRef, useMemo, useEffect } from 'react';
-import { View, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
+import { useCallback, useRef, useMemo } from 'react';
+import { FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
-import { messageQueries, ChatBubble, TypingIndicator } from '@/entities/message';
-import type { DisplayMessage, Message } from '@/entities/message';
+import { messageQueries, ChatBubble, TypingIndicator, toDisplayMessage } from '@/entities/message';
+import type { DisplayMessage } from '@/entities/message';
 import { useSSE, ChatInput } from '@/features/send-message';
 import { Loading } from '@/shared/ui';
-import { asMessageId } from '@/shared/types';
 
 interface ChatRoomProps {
   chatId: string;
@@ -20,7 +19,6 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
     sendMessage,
     isStreaming,
     streamingText,
-    error,
   } = useSSE(chatId, {
     onComplete: () => {
       // 스크롤 to bottom
@@ -32,7 +30,9 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
 
   // 메시지 목록 + 스트리밍 메시지 조합
   const messages: DisplayMessage[] = useMemo(() => {
-    const baseMessages = data?.data || [];
+    const baseMessages: DisplayMessage[] = (data?.data || [])
+      .map(toDisplayMessage)
+      .filter((msg): msg is DisplayMessage => msg !== null);
 
     if (isStreaming && streamingText) {
       const streamingMessage: DisplayMessage = {

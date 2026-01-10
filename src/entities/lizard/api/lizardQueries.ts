@@ -1,12 +1,11 @@
 import { queryOptions } from '@tanstack/react-query';
 import { lizardApi } from './lizardApi';
-import type { LizardCreate, LizardUpdate } from '../model/types';
+import type { LizardCreate, LizardUpdate } from '@/shared/api';
 
 // Query Key Factory
 export const lizardKeys = {
   all: ['lizard'] as const,
   me: () => [...lizardKeys.all, 'me'] as const,
-  detail: (id: string) => [...lizardKeys.all, 'detail', id] as const,
 };
 
 // Query Options Factory
@@ -16,13 +15,6 @@ export const lizardQueries = {
       queryKey: lizardKeys.me(),
       queryFn: lizardApi.getMyLizard,
       staleTime: 1000 * 60 * 5, // 5분
-    }),
-
-  detail: (id: string) =>
-    queryOptions({
-      queryKey: lizardKeys.detail(id),
-      queryFn: () => lizardApi.getMyLizard(),
-      enabled: !!id,
     }),
 };
 

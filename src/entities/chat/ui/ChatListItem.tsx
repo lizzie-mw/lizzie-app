@@ -30,11 +30,9 @@ export function ChatListItem({ chat, onPress }: ChatListItemProps) {
             </Text>
           )}
         </View>
-        {chat.last_message && (
-          <Text className="text-sm text-gray-500 mt-0.5" numberOfLines={1}>
-            {chat.last_message}
-          </Text>
-        )}
+        <Text className="text-sm text-gray-500 mt-0.5">
+          메시지 {chat.message_count}개
+        </Text>
       </View>
     </Pressable>
   );

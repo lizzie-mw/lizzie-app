@@ -1,32 +1,14 @@
-import type { LizardId, UserId, DateString } from '@/shared/types';
-import type { Species, Personality } from '@/shared/constants';
+import type {
+  LizardResponse,
+  LizardCreate as ApiLizardCreate,
+  LizardUpdate as ApiLizardUpdate,
+} from '@/shared/api';
 
-export interface Lizard {
-  id: LizardId;
-  user_id: UserId;
-  name: string;
-  species: Species;
-  morph?: string;
-  age_months?: number;
-  personality?: Personality;
-  image_url?: string;
-  created_at: DateString;
-  updated_at: DateString;
-}
+// Re-export API types
+export type Lizard = LizardResponse;
+export type LizardCreate = ApiLizardCreate;
+export type LizardUpdate = ApiLizardUpdate;
 
-export interface LizardCreate {
-  name: string;
-  species: Species;
-  morph?: string;
-  age_months?: number;
-  personality?: Personality;
-}
-
-export interface LizardUpdate {
-  name?: string;
-  species?: Species;
-  morph?: string;
-  age_months?: number;
-  personality?: Personality;
-  image_url?: string;
-}
+// Gender and Personality literal types (from OpenAPI pattern)
+export type Gender = 'male' | 'female' | 'unknown';
+export type Personality = 'shy' | 'active' | 'sassy' | 'chill';

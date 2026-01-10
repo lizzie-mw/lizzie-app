@@ -18,13 +18,13 @@ export default function LoginScreen() {
   const handleMockLogin = () => {
     // Mock lizard 데이터를 QueryClient에 주입
     const mockLizard: Lizard = {
-      id: 'mock-lizard-id' as Lizard['id'],
-      user_id: 'mock-user-id' as Lizard['user_id'],
+      id: 'mock-lizard-id',
       name: '리치',
       species: 'leopard_gecko',
-      morph: '탱제린',
-      age_months: 12,
-      personality: 'curious',
+      birth_date: '2023-01',
+      gender: 'male',
+      personality: 'active',
+      profile_image_url: null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -47,7 +47,7 @@ export default function LoginScreen() {
           Lizzie
         </Text>
         <Text testID="login-description" className="text-base text-gray-500 mb-12 text-center leading-6">
-          내 도마뱀과 대화하며{'\n'}케어 정보를 배워보세요
+          {'내 도마뱀과 대화하며\n케어 정보를 배워보세요'}
         </Text>
 
         {/* Google 로그인 버튼 */}
@@ -57,7 +57,7 @@ export default function LoginScreen() {
 
         {/* 이용약관 */}
         <Text testID="login-terms" className="text-xs text-gray-400 mt-6 text-center leading-5">
-          계속하면 이용약관 및 개인정보처리방침에{'\n'}동의하는 것으로 간주합니다.
+          {'계속하면 이용약관 및 개인정보처리방침에\n동의하는 것으로 간주합니다.'}
         </Text>
 
         {/* 개발용 Mock 로그인 버튼 */}

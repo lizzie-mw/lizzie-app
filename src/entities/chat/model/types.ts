@@ -1,17 +1,10 @@
-import type { ChatId, LizardId, DateString } from '@/shared/types';
+import type {
+  ChatResponse,
+  ChatCreate as ApiChatCreate,
+  ChatListResponse,
+} from '@/shared/api';
 
-export interface Chat {
-  id: ChatId;
-  lizard_id: LizardId;
-  title: string;
-  last_message?: string;
-  last_message_at?: DateString;
-  message_count: number;
-  created_at: DateString;
-  updated_at: DateString;
-}
-
-export interface ChatCreate {
-  lizard_id: string;
-  title?: string;
-}
+// Re-export API types
+export type Chat = ChatResponse;
+export type ChatCreate = ApiChatCreate;
+export type { ChatListResponse };
