@@ -1,5 +1,7 @@
-import { Pressable, Text, Alert } from 'react-native';
-import { haptics } from '@/shared/lib';
+import { Pressable, Alert } from 'react-native';
+import Animated from 'react-native-reanimated';
+import { haptics, usePressAnimation } from '@/shared/lib';
+import { Icon } from '@/shared/ui';
 import { useCreateChat } from '../model/useCreateChat';
 
 interface NewChatButtonProps {
@@ -7,6 +9,8 @@ interface NewChatButtonProps {
   chatCount: number;
   maxChats?: number;
 }
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function NewChatButton({
   lizardId,
@@ -20,6 +24,7 @@ export function NewChatButton({
   });
 
   const canCreate = chatCount < maxChats;
+  const { animatedStyle, handlePressIn, handlePressOut } = usePressAnimation();
 
   const handlePress = () => {
     if (!canCreate) {
@@ -36,17 +41,24 @@ export function NewChatButton({
   };
 
   return (
-    <Pressable
+    <AnimatedPressable
       testID="fab-new-chat"
+      style={animatedStyle}
       className={`
-        w-14 h-14 rounded-full items-center justify-center
-        shadow-lg
+        w-16 h-16 rounded-full items-center justify-center
+        shadow-xl
         ${canCreate ? 'bg-primary-500' : 'bg-gray-300'}
       `}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
       onPress={handlePress}
       disabled={isCreating}
     >
-      <Text className="text-white text-2xl font-light">+</Text>
-    </Pressable>
+      <Icon
+        name="add"
+        size="lg"
+        color="#ffffff"
+      />
+    </AnimatedPressable>
   );
 }

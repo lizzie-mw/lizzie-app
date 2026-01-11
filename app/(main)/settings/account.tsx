@@ -3,8 +3,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore, useUser } from '@/features/auth';
-import { lizardApi, lizardKeys } from '@/entities/lizard';
-import { Button } from '@/shared/ui';
+import { lizardApi, lizardKeys, type Lizard } from '@/entities/lizard';
+import { Button, Card, Icon } from '@/shared/ui';
 import { haptics } from '@/shared/lib';
 
 export default function AccountSettingsScreen() {
@@ -15,11 +15,9 @@ export default function AccountSettingsScreen() {
 
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      // 실제로는 계정 삭제 API 호출
-      // 여기서는 도마뱀 삭제 + 로그아웃으로 시뮬레이션
-      const lizard = queryClient.getQueryData(lizardKeys.me());
-      if (lizard && typeof lizard === 'object' && 'id' in lizard) {
-        await lizardApi.deleteLizard((lizard as any).id);
+      const lizard = queryClient.getQueryData<Lizard>(lizardKeys.me());
+      if (lizard?.id) {
+        await lizardApi.deleteLizard(lizard.id);
       }
       await signOut();
     },
@@ -49,38 +47,61 @@ export default function AccountSettingsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50" edges={['bottom']}>
-      {/* 계정 정보 */}
-      <View className="bg-white p-4 mb-4">
-        <Text className="text-sm text-gray-500 mb-1">이메일</Text>
-        <Text className="text-base text-gray-900">{user?.email || '-'}</Text>
+    <SafeAreaView className="flex-1 bg-cream-50" edges={['bottom']}>
+      {/* Account Info */}
+      <View className="p-4">
+        <Card variant="default" padding="lg">
+          <View className="flex-row items-center mb-4">
+            <View className="w-10 h-10 rounded-full bg-primary-100 items-center justify-center mr-3">
+              <Icon name="mail-outline" size="sm" color="#5cb82f" />
+            </View>
+            <View className="flex-1">
+              <Text className="text-xs text-earth-400 mb-0.5">이메일</Text>
+              <Text className="text-base font-medium text-gray-900">
+                {user?.email || '-'}
+              </Text>
+            </View>
+          </View>
+
+          <View className="h-px bg-cream-200 my-2" />
+
+          <View className="flex-row items-center mt-2">
+            <View className="w-10 h-10 rounded-full bg-primary-100 items-center justify-center mr-3">
+              <Icon name="calendar-outline" size="sm" color="#5cb82f" />
+            </View>
+            <View className="flex-1">
+              <Text className="text-xs text-earth-400 mb-0.5">가입일</Text>
+              <Text className="text-base font-medium text-gray-900">
+                {user?.created_at
+                  ? new Date(user.created_at).toLocaleDateString('ko-KR')
+                  : '-'}
+              </Text>
+            </View>
+          </View>
+        </Card>
       </View>
 
-      <View className="bg-white p-4 mb-4">
-        <Text className="text-sm text-gray-500 mb-1">가입일</Text>
-        <Text className="text-base text-gray-900">
-          {user?.created_at
-            ? new Date(user.created_at).toLocaleDateString('ko-KR')
-            : '-'}
-        </Text>
-      </View>
-
-      {/* 위험 영역 */}
+      {/* Danger Zone */}
       <View className="flex-1" />
 
       <View className="p-4">
-        <Button
-          variant="ghost"
-          size="lg"
-          fullWidth
-          loading={deleteMutation.isPending}
-          onPress={handleDeleteAccount}
-        >
-          <Text className="text-red-500 font-medium">계정 삭제</Text>
-        </Button>
-        <Text className="text-xs text-gray-400 text-center mt-2">
-          계정을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.
-        </Text>
+        <Card variant="default" padding="md" className="bg-red-50 border border-red-100">
+          <Text className="text-sm font-semibold text-red-600 mb-2">
+            위험 영역
+          </Text>
+          <Text className="text-xs text-red-400 mb-4">
+            계정을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.
+          </Text>
+          <Button
+            variant="outline"
+            size="md"
+            fullWidth
+            loading={deleteMutation.isPending}
+            onPress={handleDeleteAccount}
+          >
+            <Text className="text-red-500 font-medium">계정 삭제</Text>
+          </Button>
+        </Card>
       </View>
     </SafeAreaView>
   );
