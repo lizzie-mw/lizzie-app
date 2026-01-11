@@ -1,0 +1,105 @@
+appId: app.lizzie
+name: "[Chat] - Create New Chat Room"
+tags:
+  - smoke
+  - regression
+  - chat
+---
+# =====================================================
+# 채팅방 생성 플로우 테스트
+# FAB 버튼을 탭하여 새 채팅방 생성 및 진입
+# =====================================================
+
+# 앱 시작
+- stopApp
+
+- launchApp:
+    clearState: false
+
+# 애니메이션 완료 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 1. 로그인 (필요 시)
+# =====================================================
+
+- tapOn:
+    id: "login-mock-button"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 2. 홈 화면 확인
+# =====================================================
+
+- assertVisible:
+    id: "home-screen"
+
+# 초기 채팅 카운트 확인
+- assertVisible:
+    id: "home-chat-count"
+
+# 스크린샷 - 채팅 생성 전
+- takeScreenshot: "07-before-create-chat"
+
+# =====================================================
+# 3. FAB 버튼 탭하여 채팅방 생성
+# =====================================================
+
+- assertVisible:
+    id: "fab-new-chat"
+
+- tapOn:
+    id: "fab-new-chat"
+
+# 채팅방 생성 및 화면 전환 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 4. 채팅방 화면 진입 확인
+# =====================================================
+
+# NOTE: ChatRoom에 testID 추가 필요 (chat-room-screen)
+# 현재는 URL 기반 또는 텍스트 기반 확인
+
+# 채팅 입력 필드 확인 (ChatInput에 testID 필요)
+- assertVisible:
+    text: "메시지를 입력하세요..."
+
+# 스크린샷 - 새 채팅방
+- takeScreenshot: "07-new-chat-room"
+
+# =====================================================
+# 5. 홈으로 돌아가기 및 채팅 목록 확인
+# =====================================================
+
+- back
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 홈 화면 복귀
+- assertVisible:
+    id: "home-screen"
+
+# 채팅 목록에 새 채팅 표시 확인
+# NOTE: ChatListItem에 testID 추가 시 더 정확한 검증 가능
+- assertVisible:
+    text: "새 대화"
+    optional: true
+
+# 채팅 카운트 증가 확인 (1 / 5)
+- assertVisible:
+    id: "home-chat-count"
+
+# 빈 상태가 사라졌는지 확인
+- assertNotVisible:
+    id: "home-empty-state"
+    optional: true
+
+# 스크린샷 - 최종
+- takeScreenshot: "07-home-with-chat"

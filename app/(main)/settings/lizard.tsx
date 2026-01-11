@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { lizardQueries, lizardKeys, lizardApi } from '@/entities/lizard';
 import { lizardSchema, type LizardFormData } from '@/features/register-lizard';
 import { ImagePicker } from '@/features/upload-image';
-import { Button, Input, Select, Loading } from '@/shared/ui';
+import { Button, Input, Select, Loading, Card } from '@/shared/ui';
 import { SPECIES_OPTIONS, PERSONALITY_OPTIONS, GENDER_OPTIONS } from '@/shared/constants';
 import { haptics } from '@/shared/lib';
 
@@ -54,107 +54,123 @@ export default function LizardSettingsScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={['bottom']}>
+    <SafeAreaView className="flex-1 bg-cream-50" edges={['bottom']}>
       <ScrollView
         className="flex-1"
-        contentContainerClassName="p-6"
+        contentContainerClassName="p-4"
         keyboardShouldPersistTaps="handled"
       >
-        {/* 프로필 이미지 */}
-        <View className="items-center mb-8">
-          <ImagePicker
-            lizardId={lizard.id}
-            currentImageUrl={lizard.profile_image_url}
-            lizardName={lizard.name}
-            size="xl"
-          />
-          <Text className="text-sm text-gray-500 mt-2">
+        {/* Profile Image Section */}
+        <Card variant="default" padding="lg" className="mb-4 items-center">
+          <View className="rounded-full border-3 border-primary-200 p-1">
+            <ImagePicker
+              lizardId={lizard.id}
+              currentImageUrl={lizard.profile_image_url}
+              lizardName={lizard.name}
+              size="xl"
+            />
+          </View>
+          <Text className="text-sm text-earth-400 mt-3">
             탭하여 사진 변경
           </Text>
-        </View>
+        </Card>
 
-        {/* 폼 */}
-        <View className="gap-5">
-          <Controller
-            control={control}
-            name="name"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label="이름"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={errors.name?.message}
-              />
-            )}
-          />
+        {/* Basic Info Section */}
+        <Card variant="default" padding="lg" className="mb-4">
+          <Text className="text-base font-bold text-gray-900 mb-4">
+            기본 정보
+          </Text>
+          <View className="gap-4">
+            <Controller
+              control={control}
+              name="name"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="이름"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.name?.message}
+                />
+              )}
+            />
 
-          <Controller
-            control={control}
-            name="species"
-            render={({ field: { onChange, value } }) => (
-              <Select
-                label="종류"
-                options={SPECIES_OPTIONS}
-                value={value}
-                onChange={onChange}
-                error={errors.species?.message}
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="species"
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  label="종류"
+                  options={SPECIES_OPTIONS}
+                  value={value}
+                  onChange={onChange}
+                  error={errors.species?.message}
+                />
+              )}
+            />
 
-          <Controller
-            control={control}
-            name="birth_date"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                label="생년월 (YYYY-MM)"
-                placeholder="예: 2023-01"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                error={errors.birth_date?.message}
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="birth_date"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  label="생년월 (YYYY-MM)"
+                  placeholder="예: 2023-01"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.birth_date?.message}
+                />
+              )}
+            />
+          </View>
+        </Card>
 
-          <Controller
-            control={control}
-            name="gender"
-            render={({ field: { onChange, value } }) => (
-              <Select
-                label="성별"
-                options={GENDER_OPTIONS}
-                value={value || undefined}
-                onChange={onChange}
-                error={errors.gender?.message}
-              />
-            )}
-          />
+        {/* Personality Section */}
+        <Card variant="default" padding="lg" className="mb-4">
+          <Text className="text-base font-bold text-gray-900 mb-4">
+            성격 정보
+          </Text>
+          <View className="gap-4">
+            <Controller
+              control={control}
+              name="gender"
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  label="성별"
+                  options={GENDER_OPTIONS}
+                  value={value || undefined}
+                  onChange={onChange}
+                  error={errors.gender?.message}
+                />
+              )}
+            />
 
-          <Controller
-            control={control}
-            name="personality"
-            render={({ field: { onChange, value } }) => (
-              <Select
-                label="성격"
-                options={PERSONALITY_OPTIONS}
-                value={value || undefined}
-                onChange={onChange}
-                error={errors.personality?.message}
-              />
-            )}
-          />
-        </View>
+            <Controller
+              control={control}
+              name="personality"
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  label="성격"
+                  options={PERSONALITY_OPTIONS}
+                  value={value || undefined}
+                  onChange={onChange}
+                  error={errors.personality?.message}
+                />
+              )}
+            />
+          </View>
+        </Card>
 
-        {/* 저장 버튼 */}
-        <View className="mt-8">
+        {/* Save Button */}
+        <View className="mt-2 mb-4">
           <Button
             size="lg"
             fullWidth
             loading={updateMutation.isPending}
             disabled={!isDirty}
             onPress={handleSubmit(onSubmit)}
+            leftIcon="checkmark-circle-outline"
           >
             저장하기
           </Button>

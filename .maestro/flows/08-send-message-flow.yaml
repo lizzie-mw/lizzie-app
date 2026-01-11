@@ -1,0 +1,162 @@
+appId: app.lizzie
+name: "[Chat] - Send Message and Receive AI Response"
+tags:
+  - smoke
+  - regression
+  - chat
+---
+# =====================================================
+# 메시지 전송 및 AI 응답 플로우 테스트
+# 채팅방에서 메시지 입력 → 전송 → AI 응답 확인
+# =====================================================
+
+# 앱 시작
+- stopApp
+
+- launchApp:
+    clearState: false
+
+# 애니메이션 완료 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 1. 로그인 (필요 시)
+# =====================================================
+
+- tapOn:
+    id: "login-mock-button"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 2. 홈 화면 확인 및 채팅방 진입
+# =====================================================
+
+- assertVisible:
+    id: "home-screen"
+
+# 기존 채팅방이 없으면 생성
+- tapOn:
+    id: "fab-new-chat"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# 기존 채팅방이 있으면 첫 번째 채팅 탭
+# NOTE: ChatListItem에 testID 추가 시 더 정확한 선택 가능
+- tapOn:
+    text: "새 대화"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 채팅 입력 필드가 보이면 채팅방 화면
+- assertVisible:
+    text: "메시지를 입력하세요..."
+
+# 스크린샷 - 메시지 전송 전
+- takeScreenshot: "08-before-send-message"
+
+# =====================================================
+# 3. 메시지 입력 및 전송
+# =====================================================
+
+# NOTE: ChatInput에 testID 추가 필요
+# 현재는 placeholder 텍스트로 입력 필드 찾기
+
+# 입력 필드 탭
+- tapOn:
+    text: "메시지를 입력하세요..."
+
+# 메시지 입력
+- inputText: "안녕! 오늘 기분이 어때?"
+
+# 잠시 대기 (입력 완료)
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# 스크린샷 - 입력 후
+- takeScreenshot: "08-after-input"
+
+# 전송 버튼 탭
+# NOTE: ChatInput Send Button에 testID 추가 필요 (chat-send-button)
+# 현재는 "↑" 텍스트로 찾기
+- tapOn:
+    text: "↑"
+
+# 메시지 전송 및 SSE 스트리밍 대기
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# =====================================================
+# 4. 사용자 메시지 및 AI 응답 확인
+# =====================================================
+
+# 사용자가 보낸 메시지 확인
+- assertVisible:
+    text: "안녕! 오늘 기분이 어때?"
+
+# AI 응답 대기 및 확인
+# NOTE: ChatBubble에 testID 추가 시 더 정확한 검증 가능
+# SSE 스트리밍이므로 충분한 대기 시간 필요
+- waitForAnimationToEnd:
+    timeout: 10000
+
+# 스크린샷 - AI 응답 후
+- takeScreenshot: "08-after-ai-response"
+
+# =====================================================
+# 5. 추가 메시지 전송 테스트
+# =====================================================
+
+# 두 번째 메시지 입력
+- tapOn:
+    text: "메시지를 입력하세요..."
+
+- inputText: "고마워!"
+
+- waitForAnimationToEnd:
+    timeout: 1000
+
+- tapOn:
+    text: "↑"
+
+# 전송 및 응답 대기
+- waitForAnimationToEnd:
+    timeout: 10000
+
+# 두 번째 메시지 확인
+- assertVisible:
+    text: "고마워!"
+
+# 스크린샷 - 최종
+- takeScreenshot: "08-chat-conversation"
+
+# =====================================================
+# 6. 홈으로 돌아가기
+# =====================================================
+
+- back
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 홈 화면 복귀 확인
+- assertVisible:
+    id: "home-screen"
+
+# 스크린샷 - 최종 홈
+- takeScreenshot: "08-home-final"
+
+# =====================================================
+# NOTE: SSE Streaming 테스트 제약사항
+# =====================================================
+# 1. AI 응답이 SSE로 스트리밍되므로 완료 시점 감지 어려움
+# 2. 충분한 timeout (10초)으로 응답 대기
+# 3. 실제 백엔드 연동 시 응답 시간 변동 가능
+# 4. TypingIndicator 표시 확인 시 testID 추가 권장

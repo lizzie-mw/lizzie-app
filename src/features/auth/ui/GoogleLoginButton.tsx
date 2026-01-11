@@ -1,4 +1,3 @@
-import { Text, View } from 'react-native';
 import { Button } from '@/shared/ui';
 import { useAuthStore } from '../model/authStore';
 
@@ -25,11 +24,9 @@ export function GoogleLoginButton({ onError }: GoogleLoginButtonProps) {
       fullWidth
       loading={isLoading}
       onPress={handlePress}
+      leftIcon="logo-google"
     >
-      <View className="flex-row items-center">
-        <Text className="text-lg mr-2">G</Text>
-        <Text className="text-gray-900 font-medium">Google로 계속하기</Text>
-      </View>
+      Google로 계속하기
     </Button>
   );
 }

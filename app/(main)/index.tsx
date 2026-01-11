@@ -1,4 +1,4 @@
-import { View, FlatList, Text, Pressable } from 'react-native';
+import { View, FlatList, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,7 +6,7 @@ import { lizardQueries } from '@/entities/lizard';
 import { chatQueries, ChatListItem } from '@/entities/chat';
 import { NewChatButton } from '@/features/create-chat';
 import { LizardProfileCard } from '@/widgets/lizard-profile-card';
-import { Loading } from '@/shared/ui';
+import { Loading, IconButton, Icon, EmptyState } from '@/shared/ui';
 import { haptics } from '@/shared/lib';
 
 export default function HomeScreen() {
@@ -33,36 +33,43 @@ export default function HomeScreen() {
   };
 
   const handleSettingsPress = () => {
-    haptics.light();
     router.push('/settings');
   };
 
   return (
-    <SafeAreaView testID="home-screen" className="flex-1 bg-gray-50" edges={['bottom']}>
-      {/* 설정 버튼 (헤더 영역) */}
-      <View className="flex-row justify-end px-4 pt-2">
-        <Pressable
+    <SafeAreaView testID="home-screen" className="flex-1 bg-cream-50" edges={['bottom']}>
+      {/* Header */}
+      <View className="flex-row justify-between items-center px-4 pt-2 pb-3">
+        <View className="flex-row items-center">
+          <Icon family="material" name="lizard" size="md" color="#5cb82f" />
+          <Text className="text-xl font-bold text-gray-900 ml-2">Lizzie</Text>
+        </View>
+        <IconButton
           testID="settings-button"
-          className="p-2"
+          icon="settings-outline"
+          variant="ghost"
+          size="md"
           onPress={handleSettingsPress}
-        >
-          <Text className="text-2xl">⚙️</Text>
-        </Pressable>
+        />
       </View>
 
       <View className="flex-1">
-        {/* 프로필 카드 */}
+        {/* Profile Card */}
         <View testID="home-profile-card" className="px-4 pb-4">
           <LizardProfileCard lizard={lizard} />
         </View>
 
-        {/* 채팅 목록 */}
+        {/* Chat List */}
         <View testID="home-chat-list" className="flex-1 bg-white rounded-t-3xl">
-          <View className="flex-row justify-between items-center px-4 py-3 border-b border-gray-100">
-            <Text testID="home-chat-title" className="text-lg font-semibold text-gray-900">대화</Text>
-            <Text testID="home-chat-count" className="text-sm text-gray-400">
-              {chats?.length || 0} / 5
+          <View className="flex-row justify-between items-center px-4 py-4 border-b border-cream-200">
+            <Text testID="home-chat-title" className="text-lg font-bold text-gray-900">
+              대화
             </Text>
+            <View className="bg-primary-100 px-2.5 py-1 rounded-full">
+              <Text testID="home-chat-count" className="text-xs font-semibold text-primary-600">
+                {chats?.length || 0} / 5
+              </Text>
+            </View>
           </View>
 
           {isChatsLoading ? (
@@ -78,14 +85,16 @@ export default function HomeScreen() {
                 />
               )}
               contentContainerStyle={{ paddingBottom: 100 }}
+              ItemSeparatorComponent={() => (
+                <View className="h-px bg-cream-100 mx-4" />
+              )}
             />
           ) : (
-            <View testID="home-empty-state" className="flex-1 items-center justify-center py-12">
-              <Text className="text-4xl mb-3">💬</Text>
-              <Text className="text-gray-500 text-center">
-                아직 대화가 없어요{'\n'}새 대화를 시작해보세요!
-              </Text>
-            </View>
+            <EmptyState
+              icon="chatbubble-ellipses-outline"
+              title="아직 대화가 없어요"
+              description="새 대화를 시작해서 도마뱀과 이야기해보세요!"
+            />
           )}
         </View>
       </View>

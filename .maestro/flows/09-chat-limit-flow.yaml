@@ -1,0 +1,183 @@
+appId: app.lizzie
+name: "[Chat] - Chat Room Limit Test (Max 5)"
+tags:
+  - regression
+  - edge-cases
+  - chat
+---
+# =====================================================
+# 채팅방 5개 제한 테스트
+# 최대 5개 채팅방 생성 후 추가 생성 시도 → 경고 확인
+# =====================================================
+
+# 앱 시작 (깨끗한 상태)
+- stopApp
+
+- launchApp:
+    clearState: true
+
+# 애니메이션 완료 대기
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 1. 로그인
+# =====================================================
+
+- assertVisible:
+    id: "login-screen"
+
+- tapOn:
+    id: "login-mock-button"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# =====================================================
+# 2. 홈 화면 확인
+# =====================================================
+
+- assertVisible:
+    id: "home-screen"
+
+# 초기 채팅 카운트 확인 (0 / 5)
+- assertVisible:
+    id: "home-chat-count"
+
+- assertVisible:
+    text: "0 / 5"
+
+# 스크린샷 - 초기 상태
+- takeScreenshot: "09-initial-state"
+
+# =====================================================
+# 3. 채팅방 5개 생성
+# =====================================================
+
+# 1번째 채팅방 생성
+- tapOn:
+    id: "fab-new-chat"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- back
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 2번째 채팅방 생성
+- tapOn:
+    id: "fab-new-chat"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- back
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 3번째 채팅방 생성
+- tapOn:
+    id: "fab-new-chat"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- back
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 4번째 채팅방 생성
+- tapOn:
+    id: "fab-new-chat"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- back
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# 5번째 채팅방 생성
+- tapOn:
+    id: "fab-new-chat"
+
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- back
+
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# =====================================================
+# 4. 채팅 카운트 5/5 확인
+# =====================================================
+
+- assertVisible:
+    id: "home-screen"
+
+- assertVisible:
+    id: "home-chat-count"
+
+- assertVisible:
+    text: "5 / 5"
+
+# FAB 버튼이 비활성화 상태 (회색)
+- assertVisible:
+    id: "fab-new-chat"
+
+# 스크린샷 - 5개 생성 후
+- takeScreenshot: "09-five-chats-created"
+
+# =====================================================
+# 5. 6번째 채팅방 생성 시도 → 경고 확인
+# =====================================================
+
+# FAB 버튼 탭 (비활성화 상태이지만 경고 표시)
+- tapOn:
+    id: "fab-new-chat"
+
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# Alert 확인
+# NOTE: Maestro는 네이티브 Alert를 텍스트로 확인 가능
+- assertVisible:
+    text: "채팅방 제한"
+
+- assertVisible:
+    text: "최대 5개의 채팅방만 만들 수 있어요."
+
+# 스크린샷 - 경고 표시
+- takeScreenshot: "09-limit-alert"
+
+# Alert 닫기 (확인 버튼)
+- tapOn:
+    text: "확인"
+
+- waitForAnimationToEnd:
+    timeout: 2000
+
+# 홈 화면 유지 확인
+- assertVisible:
+    id: "home-screen"
+
+# 여전히 5 / 5
+- assertVisible:
+    text: "5 / 5"
+
+# 스크린샷 - 최종
+- takeScreenshot: "09-final-state"
+
+# =====================================================
+# NOTE: 비즈니스 규칙 검증
+# =====================================================
+# 1. 사용자당 최대 5개 채팅방 생성 가능
+# 2. 5개 도달 시 FAB 버튼 비활성화 (회색)
+# 3. 비활성화 상태에서 탭 시 경고 Alert 표시
+# 4. 채팅방 삭제 기능 추가 시 삭제 후 재생성 테스트 필요

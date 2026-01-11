@@ -42,3 +42,5 @@ yarn-error.*
 
 
 test-result
+
+*.png
