@@ -1,9 +1,9 @@
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { lizardQueries } from '@/entities/lizard';
-import { chatQueries, ChatListItem } from '@/entities/chat';
+import { chatQueries, chatKeys, chatApi, ChatListItem } from '@/entities/chat';
 import { NewChatButton } from '@/features/create-chat';
 import { LizardProfileCard } from '@/widgets/lizard-profile-card';
 import { Loading, IconButton, Icon, EmptyState } from '@/shared/ui';
@@ -11,12 +11,27 @@ import { haptics } from '@/shared/lib';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { data: lizard, isLoading: isLizardLoading } = useQuery(lizardQueries.me());
 
   const { data: chats, isLoading: isChatsLoading } = useQuery({
     ...chatQueries.list(lizard?.id || ''),
     enabled: !!lizard?.id,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: chatApi.deleteChat,
+    onSuccess: () => {
+      haptics.success();
+      if (lizard?.id) {
+        queryClient.invalidateQueries({ queryKey: chatKeys.list(lizard.id) });
+      }
+    },
+    onError: (error: Error) => {
+      haptics.error();
+      Alert.alert('삭제 실패', error.message || '다시 시도해주세요.');
+    },
   });
 
   if (isLizardLoading) {
@@ -30,6 +45,10 @@ export default function HomeScreen() {
   const handleChatPress = (chatId: string) => {
     haptics.light();
     router.push(`/chat/${chatId}`);
+  };
+
+  const handleChatDelete = (chatId: string) => {
+    deleteMutation.mutate(chatId);
   };
 
   const handleSettingsPress = () => {
@@ -82,6 +101,7 @@ export default function HomeScreen() {
                 <ChatListItem
                   chat={item}
                   onPress={() => handleChatPress(item.id)}
+                  onDelete={handleChatDelete}
                 />
               )}
               contentContainerStyle={{ paddingBottom: 100 }}
