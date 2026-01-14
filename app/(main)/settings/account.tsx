@@ -93,13 +93,13 @@ export default function AccountSettingsScreen() {
             계정을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.
           </Text>
           <Button
-            variant="outline"
+            variant="danger"
             size="md"
             fullWidth
             loading={deleteMutation.isPending}
             onPress={handleDeleteAccount}
           >
-            <Text className="text-red-500 font-medium">계정 삭제</Text>
+            계정 삭제
           </Button>
         </Card>
       </View>

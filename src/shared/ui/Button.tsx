@@ -4,7 +4,7 @@ import { haptics, usePressAnimation } from '@/shared/lib';
 import { Icon, type IconFamily, type IconSize } from './Icon';
 import type { ReactNode } from 'react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends Omit<PressableProps, 'children'> {
@@ -37,6 +37,10 @@ const variantStyles: Record<ButtonVariant, { container: string; text: string }> 
     container: 'active:bg-gray-100',
     text: 'text-gray-700',
   },
+  danger: {
+    container: 'bg-red-500 active:bg-red-600',
+    text: 'text-white',
+  },
 };
 
 const sizeStyles: Record<ButtonSize, { container: string; text: string }> = {
@@ -65,6 +69,7 @@ const iconColorMap: Record<ButtonVariant, string> = {
   secondary: '#374151',
   outline: '#374151',
   ghost: '#374151',
+  danger: '#ffffff',
 };
 
 export function Button({
@@ -109,7 +114,7 @@ export function Button({
     >
       {loading ? (
         <ActivityIndicator
-          color={variant === 'primary' ? '#ffffff' : '#374151'}
+          color={variant === 'primary' || variant === 'danger' ? '#ffffff' : '#374151'}
           size="small"
         />
       ) : (
