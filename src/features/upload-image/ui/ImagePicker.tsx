@@ -1,5 +1,5 @@
-import { View, Pressable, ActivityIndicator, Text } from 'react-native';
-import { Avatar } from '@/shared/ui';
+import { View, Pressable, ActivityIndicator } from 'react-native';
+import { Avatar, Icon } from '@/shared/ui';
 import { haptics } from '@/shared/lib';
 import { useImageUpload } from '../model/useImageUpload';
 
@@ -49,7 +49,7 @@ export function ImagePicker({
 
         {/* Edit badge */}
         <View className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary-500 items-center justify-center border-2 border-white">
-          <Text className="text-white text-xs">📷</Text>
+          <Icon name="camera" size="xs" color="#ffffff" />
         </View>
       </View>
     </Pressable>

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { messageQueries, ChatBubble, TypingIndicator, toDisplayMessage } from '@/entities/message';
 import type { DisplayMessage } from '@/entities/message';
 import { useSSE, ChatInput } from '@/features/send-message';
-import { Loading } from '@/shared/ui';
+import { Loading, EmptyState } from '@/shared/ui';
 
 interface ChatRoomProps {
   chatId: string;
@@ -81,10 +81,23 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         inverted
-        contentContainerStyle={{ padding: 16, paddingTop: 8 }}
+        contentContainerStyle={
+          messages.length === 0
+            ? { flex: 1, justifyContent: 'center' }
+            : { padding: 16, paddingTop: 8 }
+        }
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           isStreaming && !streamingText ? <TypingIndicator /> : null
+        }
+        ListEmptyComponent={
+          !isStreaming ? (
+            <EmptyState
+              icon="chatbubble-outline"
+              title="대화를 시작해보세요"
+              description="도마뱀 친구에게 궁금한 것을 물어보세요!"
+            />
+          ) : null
         }
       />
 

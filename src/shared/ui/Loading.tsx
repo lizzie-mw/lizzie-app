@@ -8,7 +8,7 @@ interface LoadingProps {
 export function Loading({ message, fullScreen = false }: LoadingProps) {
   const content = (
     <>
-      <ActivityIndicator size="large" color="#22c55e" />
+      <ActivityIndicator size="large" color="#5cb82f" />
       {message && (
         <Text className="text-gray-500 mt-3 text-center">{message}</Text>
       )}

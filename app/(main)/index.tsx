@@ -37,7 +37,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView testID="home-screen" className="flex-1 bg-cream-50" edges={['bottom']}>
+    <SafeAreaView testID="home-screen" className="flex-1 bg-cream-50" edges={['top', 'bottom']}>
       {/* Header */}
       <View className="flex-row justify-between items-center px-4 pt-2 pb-3">
         <View className="flex-row items-center">

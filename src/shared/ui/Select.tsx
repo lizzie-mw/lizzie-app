@@ -79,10 +79,19 @@ export function Select({
           onPress={() => setIsOpen(false)}
         >
           <View className="bg-white rounded-t-3xl max-h-[60%]">
-            <View className="p-4 border-b border-gray-100">
-              <Text className="text-lg font-semibold text-center">
+            <View className="flex-row items-center justify-between px-4 py-4 border-b border-gray-100">
+              <Pressable
+                className="py-1 px-2"
+                onPress={() => setIsOpen(false)}
+              >
+                <Text className="text-base text-gray-500">취소</Text>
+              </Pressable>
+              <Text className="text-lg font-semibold text-center flex-1">
                 {label || '선택'}
               </Text>
+              <View className="py-1 px-2 opacity-0">
+                <Text className="text-base">취소</Text>
+              </View>
             </View>
             <ScrollView className="p-2">
               {options.map((option) => (

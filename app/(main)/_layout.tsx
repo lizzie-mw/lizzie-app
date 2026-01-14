@@ -6,8 +6,7 @@ export default function MainLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: 'Lizzie',
-          headerLargeTitle: true,
+          headerShown: false,
         }}
       />
       <Stack.Screen
