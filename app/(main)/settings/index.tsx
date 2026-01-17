@@ -92,7 +92,7 @@ export default function SettingsScreen() {
           {lizard?.name || '도마뱀'}
         </Text>
         <Text className="text-sm text-earth-400 mt-1">
-          Lizzie와 함께하는 케어 파트너
+          꼬물톡과 함께하는 케어 파트너
         </Text>
       </View>
 
@@ -124,7 +124,7 @@ export default function SettingsScreen() {
       {/* Version */}
       <View className="flex-1" />
       <Text className="text-center text-earth-400 text-xs pb-4">
-        Lizzie v1.0.0
+        꼬물톡 v1.0.0
       </Text>
     </SafeAreaView>
   );

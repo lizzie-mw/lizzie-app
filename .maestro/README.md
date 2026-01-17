@@ -1,6 +1,6 @@
-# Maestro E2E Tests for Lizzie App
+# Maestro E2E Tests for 꼬물톡 (Ggomul-Talk)
 
-Lizzie 앱의 E2E 테스트 자동화를 위한 Maestro 플로우 모음입니다.
+꼬물톡 앱의 E2E 테스트 자동화를 위한 Maestro 플로우 모음입니다.
 
 ## 빠른 시작
 
@@ -204,7 +204,7 @@ maestro test .maestro/flows/ --continuous
 
 - **Maestro 공식 문서**: https://maestro.mobile.dev/
 - **Maestro CLI**: https://maestro.mobile.dev/cli/commands
-- **프로젝트 Tech Spec**: `/spec/lizzie-frontend-tech-spec.md`
+- **프로젝트 Tech Spec**: `/spec/ggomul-talk-frontend-tech-spec.md`
 - **CLAUDE.md**: 프로젝트 전체 가이드
 
 ---

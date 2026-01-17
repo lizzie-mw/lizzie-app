@@ -1,13 +1,13 @@
-# Maestro E2E Test Plan - Lizzie App
+# Maestro E2E Test Plan - 꼬물톡 (Ggomul-Talk)
 
 **분석 일시**: 2026-01-10
-**분석 대상**: Lizzie App (도마뱀 반려인 AI 챗봇)
+**분석 대상**: 꼬물톡 (Ggomul-Talk) - 도마뱀 반려인 AI 챗봇
 **프레임워크**: React Native + Expo Router
 **Maestro 버전**: 2.0.10
 
 ## Executive Summary
 
-Lizzie 앱의 E2E 테스트 현황을 분석한 결과, 기본적인 Happy Path는 커버되어 있으나 핵심 기능인 **채팅 플로우**와 **온보딩 플로우**가 누락되어 있습니다.
+꼬물톡 앱의 E2E 테스트 현황을 분석한 결과, 기본적인 Happy Path는 커버되어 있으나 핵심 기능인 **채팅 플로우**와 **온보딩 플로우**가 누락되어 있습니다.
 
 ## 1. 화면/기능 분석 결과
 
@@ -243,4 +243,4 @@ maestro test .maestro/flows/ --include-tags edge-cases
 
 - Maestro 공식 문서: https://maestro.mobile.dev/
 - Expo Router 테스트 가이드: https://docs.expo.dev/router/reference/testing/
-- 프로젝트 Tech Spec: `/Users/ddingg/dev/lizzie-app/spec/lizzie-frontend-tech-spec.md`
+- 프로젝트 Tech Spec: `spec/ggomul-talk-frontend-tech-spec.md`

@@ -1,14 +1,14 @@
 # Maestro E2E Test Coverage Summary
 
 **분석 일시**: 2026-01-10
-**Lizzie App**: 도마뱀 반려인 AI 챗봇
+**꼬물톡 (Ggomul-Talk)**: 도마뱀 반려인 AI 챗봇
 **Maestro CLI**: 2.0.10
 
 ---
 
 ## 1. Executive Summary
 
-Lizzie 앱의 E2E 테스트 현황을 분석한 결과:
+꼬물톡 앱의 E2E 테스트 현황을 분석한 결과:
 
 - **기존 플로우**: 5개 (Happy Path 중심)
 - **신규 플로우**: 5개 추가 (채팅 핵심 기능)
@@ -375,7 +375,7 @@ maestro test .maestro/flows/10-logout-flow.yaml
 - **Maestro CLI 명령어**: https://maestro.mobile.dev/cli/commands
 - **Expo Router 테스트**: https://docs.expo.dev/router/reference/testing/
 - **React Native testID**: https://reactnative.dev/docs/view#testid
-- **프로젝트 Tech Spec**: `/Users/ddingg/dev/lizzie-app/spec/lizzie-frontend-tech-spec.md`
+- **프로젝트 Tech Spec**: `spec/ggomul-talk-frontend-tech-spec.md`
 
 ---
 

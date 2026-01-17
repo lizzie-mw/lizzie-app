@@ -61,7 +61,7 @@ export default function HomeScreen() {
       <View className="flex-row justify-between items-center px-4 pt-2 pb-3">
         <View className="flex-row items-center">
           <Icon family="material" name="lizard" size="md" color="#5cb82f" />
-          <Text className="text-xl font-bold text-gray-900 ml-2">Lizzie</Text>
+          <Text className="text-xl font-bold text-gray-900 ml-2">꼬물톡</Text>
         </View>
         <IconButton
           testID="settings-button"

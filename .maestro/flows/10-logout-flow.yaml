@@ -119,7 +119,7 @@ tags:
     id: "login-title"
 
 - assertVisible:
-    text: "Lizzie"
+    text: "꼬물톡"
 
 - assertVisible:
     id: "login-google-button"

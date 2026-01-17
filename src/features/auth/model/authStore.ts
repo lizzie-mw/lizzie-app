@@ -120,7 +120,7 @@ export const useAuthStore = create<AuthStore>()(
 
           const mockUser = {
             id: 'mock-user-id',
-            email: 'test@lizzie.app',
+            email: 'test@ggomul-talk.app',
             created_at: new Date().toISOString(),
           } as User;
 

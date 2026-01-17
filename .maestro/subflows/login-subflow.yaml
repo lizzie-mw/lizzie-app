@@ -8,7 +8,7 @@ name: "[Subflow] - Login Helper"
 
 # 로그인 화면 확인
 - assertVisible:
-    text: "Lizzie"
+    text: "꼬물톡"
 
 # Google 로그인 버튼 탭
 - tapOn:

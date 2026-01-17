@@ -33,8 +33,8 @@ emulator -avd Pixel_5_API_33
 
 ### 3. 앱 실행 확인
 
-- iOS: Simulator에서 Lizzie 앱이 실행 중이어야 함
-- Android: Emulator에서 Lizzie 앱이 실행 중이어야 함
+- iOS: Simulator에서 꼬물톡(Lizzie) 앱이 실행 중이어야 함
+- Android: Emulator에서 꼬물톡(Lizzie) 앱이 실행 중이어야 함
 - App ID: `app.lizzie` (config.yaml에 정의)
 
 ---

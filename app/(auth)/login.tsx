@@ -85,7 +85,7 @@ export default function LoginScreen() {
           className="text-5xl font-extrabold text-gray-900 mb-3"
           style={{ letterSpacing: -1 }}
         >
-          Lizzie
+          꼬물톡
         </Text>
         <Text
           testID="login-description"

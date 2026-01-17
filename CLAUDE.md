@@ -1,8 +1,8 @@
-# Lizzie App - Claude Instructions
+# 꼬물톡 (Ggomul-Talk) - Claude Instructions
 
 ## Project Overview
 
-Lizzie는 도마뱀 반려인을 위한 AI 챗봇 앱입니다. 사용자가 등록한 도마뱀의 페르소나로 대화하며 케어 정보를 제공합니다.
+꼬물톡(Ggomul-Talk)은 도마뱀 반려인을 위한 AI 챗봇 앱입니다. 사용자가 등록한 도마뱀의 페르소나로 대화하며 케어 정보를 제공합니다.
 
 ## Tech Stack
 
@@ -63,7 +63,7 @@ Each slice can have these segments:
 ## Folder Structure
 
 ```
-lizzie-app/
+ggomul-talk/
 ├── app/                          # Expo Router (Pages)
 │   ├── (auth)/                   # Auth group
 │   │   ├── login.tsx
@@ -263,5 +263,5 @@ bunx expo-doctor@latest
 
 ## Reference Documents
 
-- [Frontend Tech Spec](./spec/lizzie-frontend-tech-spec.md)
-- [Product Spec](./spec/lizzie-product-spec.md)
+- [Frontend Tech Spec](./spec/ggomul-talk-frontend-tech-spec.md)
+- [Product Spec](./spec/ggomul-talk-product-spec.md)
