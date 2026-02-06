@@ -29,7 +29,7 @@ export function EmptyState({
 
   useEffect(() => {
     translateY.value = withDelay(
-      1000,
+      300,
       withRepeat(
         withSequence(
           withTiming(-8, { duration: 400 }),
