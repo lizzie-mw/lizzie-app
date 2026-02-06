@@ -28,7 +28,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
 
       <View
         className={`
-          max-w-[75%] px-4 py-3 rounded-2xl
+          max-w-[80%] px-4 py-3 rounded-2xl
           ${isUser
             ? 'bg-primary-500 rounded-br-sm'
             : 'bg-cream-100 rounded-bl-sm'

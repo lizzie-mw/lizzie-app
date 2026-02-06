@@ -48,13 +48,11 @@ export const apiClient = ky.create({
         if (response) {
           try {
             const body = await response.json() as ApiError;
-            return new HTTPError(
-              response,
-              error.request,
-              error.options
-            );
-          } catch {
-            // JSON 파싱 실패 시 기본 에러 반환
+            if (body.detail?.message) {
+              throw new HttpError(response.status, body.detail.code, body.detail.message);
+            }
+          } catch (e) {
+            if (e instanceof HttpError) throw e;
           }
         }
 
@@ -65,14 +63,9 @@ export const apiClient = ky.create({
 });
 
 // 에러 메시지 추출 헬퍼
-export async function getErrorMessage(error: unknown): Promise<string> {
-  if (error instanceof HTTPError) {
-    try {
-      const body = await error.response.json() as ApiError;
-      return body.detail?.message || '오류가 발생했어요.';
-    } catch {
-      return '오류가 발생했어요.';
-    }
+export function getErrorMessage(error: unknown): string {
+  if (error instanceof HttpError) {
+    return error.message;
   }
 
   if (error instanceof Error) {

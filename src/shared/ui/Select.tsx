@@ -1,5 +1,6 @@
 import { View, Text, Pressable, ScrollView, Modal } from 'react-native';
 import { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { haptics } from '@/shared/lib';
 
 interface Option {
@@ -27,6 +28,7 @@ export function Select({
   error,
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const selectedOption = options.find((opt) => opt.value === value);
 
@@ -114,7 +116,7 @@ export function Select({
                 </Pressable>
               ))}
             </ScrollView>
-            <View className="h-8" />
+            <View style={{ height: Math.max(insets.bottom, 16) }} />
           </View>
         </Pressable>
       </Modal>

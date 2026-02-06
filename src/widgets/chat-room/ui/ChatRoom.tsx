@@ -1,24 +1,37 @@
-import { useCallback, useRef, useMemo } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
-import { messageQueries, ChatBubble, TypingIndicator, toDisplayMessage } from '@/entities/message';
+import { useCallback, useRef, useMemo, useState } from 'react';
+import { FlatList, KeyboardAvoidingView, Platform, View, Text, Pressable, RefreshControl } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { messageQueries, messageKeys, ChatBubble, TypingIndicator, DateSeparator, toDisplayMessage } from '@/entities/message';
 import type { DisplayMessage } from '@/entities/message';
 import { useSSE, ChatInput } from '@/features/send-message';
-import { Loading, EmptyState } from '@/shared/ui';
+import { isSameDay } from '@/shared/lib';
+import { Loading, EmptyState, Icon } from '@/shared/ui';
 
 interface ChatRoomProps {
   chatId: string;
 }
 
 export function ChatRoom({ chatId }: ChatRoomProps) {
+  const headerHeight = useHeaderHeight();
+  const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { data, isLoading } = useQuery(messageQueries.list(chatId));
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await queryClient.invalidateQueries({ queryKey: messageKeys.list(chatId) });
+    setIsRefreshing(false);
+  };
 
   const {
     sendMessage,
     isStreaming,
     streamingText,
+    error,
+    retry,
   } = useSSE(chatId, {
     onComplete: () => {
       // 스크롤 to bottom
@@ -56,8 +69,24 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: DisplayMessage }) => <ChatBubble message={item} />,
-    []
+    ({ item, index }: { item: DisplayMessage; index: number }) => {
+      const showDateSeparator = (() => {
+        if (!('created_at' in item)) return false;
+        const nextItem = messages[index + 1];
+        if (!nextItem || !('created_at' in nextItem)) return true;
+        return !isSameDay(item.created_at, nextItem.created_at);
+      })();
+
+      return (
+        <>
+          <ChatBubble message={item} />
+          {showDateSeparator && 'created_at' in item && (
+            <DateSeparator date={item.created_at} />
+          )}
+        </>
+      );
+    },
+    [messages]
   );
 
   const keyExtractor = useCallback(
@@ -73,7 +102,7 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
     <KeyboardAvoidingView
       className="flex-1 bg-white"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? headerHeight : 0}
     >
       <FlatList
         ref={flatListRef}
@@ -81,6 +110,14 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         inverted
+        keyboardDismissMode="on-drag"
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            tintColor="#5cb82f"
+          />
+        }
         contentContainerStyle={
           messages.length === 0
             ? { flex: 1, justifyContent: 'center' }
@@ -100,6 +137,16 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
           ) : null
         }
       />
+
+      {error && (
+        <View className="flex-row items-center bg-red-50 px-4 py-2.5 border-t border-red-100">
+          <Icon name="alert-circle-outline" size="sm" color="#ef4444" />
+          <Text className="flex-1 text-sm text-red-600 ml-2">{error.message}</Text>
+          <Pressable className="bg-red-500 px-3 py-1.5 rounded-lg" onPress={retry}>
+            <Text className="text-white text-sm font-medium">재시도</Text>
+          </Pressable>
+        </View>
+      )}
 
       <ChatInput onSend={handleSend} disabled={isStreaming} />
     </KeyboardAvoidingView>

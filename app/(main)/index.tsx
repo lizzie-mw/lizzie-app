@@ -1,7 +1,8 @@
-import { View, FlatList, Text, Alert } from 'react-native';
+import { useState } from 'react';
+import { View, FlatList, Text, Alert, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lizardQueries } from '@/entities/lizard';
 import { chatQueries, chatKeys, chatApi, ChatListItem } from '@/entities/chat';
 import { NewChatButton } from '@/features/create-chat';
@@ -12,6 +13,7 @@ import { haptics } from '@/shared/lib';
 export default function HomeScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const insets = useSafeAreaInsets();
 
   const { data: lizard, isLoading: isLizardLoading } = useQuery(lizardQueries.me());
 
@@ -22,15 +24,28 @@ export default function HomeScreen() {
 
   const deleteMutation = useMutation({
     mutationFn: chatApi.deleteChat,
-    onSuccess: () => {
+    onMutate: async (chatId) => {
+      if (!lizard?.id) return;
+      await queryClient.cancelQueries({ queryKey: chatKeys.list(lizard.id) });
+      const previous = queryClient.getQueryData(chatKeys.list(lizard.id));
+      queryClient.setQueryData(
+        chatKeys.list(lizard.id),
+        (old: typeof chats) => old?.filter((c) => c.id !== chatId),
+      );
       haptics.success();
+      return { previous };
+    },
+    onError: (error: Error, _chatId, context) => {
+      if (lizard?.id && context?.previous) {
+        queryClient.setQueryData(chatKeys.list(lizard.id), context.previous);
+      }
+      haptics.error();
+      Alert.alert('삭제 실패', error.message || '다시 시도해주세요.');
+    },
+    onSettled: () => {
       if (lizard?.id) {
         queryClient.invalidateQueries({ queryKey: chatKeys.list(lizard.id) });
       }
-    },
-    onError: (error: Error) => {
-      haptics.error();
-      Alert.alert('삭제 실패', error.message || '다시 시도해주세요.');
     },
   });
 
@@ -49,6 +64,15 @@ export default function HomeScreen() {
 
   const handleChatDelete = (chatId: string) => {
     deleteMutation.mutate(chatId);
+  };
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    if (!lizard?.id) return;
+    setIsRefreshing(true);
+    await queryClient.invalidateQueries({ queryKey: chatKeys.list(lizard.id) });
+    setIsRefreshing(false);
   };
 
   const handleSettingsPress = () => {
@@ -105,6 +129,13 @@ export default function HomeScreen() {
                 />
               )}
               contentContainerStyle={{ paddingBottom: 100 }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefreshing}
+                  onRefresh={handleRefresh}
+                  tintColor="#5cb82f"
+                />
+              }
               ItemSeparatorComponent={() => (
                 <View className="h-px bg-cream-100 mx-4" />
               )}
@@ -120,7 +151,7 @@ export default function HomeScreen() {
       </View>
 
       {/* FAB */}
-      <View className="absolute bottom-6 right-6">
+      <View className="absolute right-6" style={{ bottom: Math.max(insets.bottom, 24) }}>
         <NewChatButton
           lizardId={lizard.id}
           chatCount={chats?.length || 0}

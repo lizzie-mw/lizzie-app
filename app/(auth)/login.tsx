@@ -65,9 +65,11 @@ export default function LoginScreen() {
   return (
     <SafeAreaView testID="login-screen" className="flex-1 bg-cream-50">
       {/* Decorative Background Blobs */}
-      <View className="absolute top-0 left-0 w-40 h-40 bg-primary-100 rounded-full -translate-x-20 -translate-y-10 opacity-60" />
-      <View className="absolute top-20 right-0 w-32 h-32 bg-accent-100 rounded-full translate-x-16 opacity-50" />
-      <View className="absolute bottom-40 left-0 w-24 h-24 bg-primary-200 rounded-full -translate-x-10 opacity-40" />
+      <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+        <View className="absolute top-0 left-0 w-40 h-40 bg-primary-100 rounded-full -translate-x-20 -translate-y-10 opacity-60" />
+        <View className="absolute top-20 right-0 w-32 h-32 bg-accent-100 rounded-full translate-x-16 opacity-50" />
+        <View className="absolute bottom-40 left-0 w-24 h-24 bg-primary-200 rounded-full -translate-x-10 opacity-40" />
+      </View>
 
       <View className="flex-1 justify-center items-center px-8">
         {/* Logo with Animation */}
@@ -109,13 +111,16 @@ export default function LoginScreen() {
 
         {/* Dev Mock Login Button */}
         {__DEV__ && (
-          <Pressable
-            testID="login-mock-button"
-            onPress={handleMockLogin}
-            className="mt-8 px-4 py-2 bg-earth-200 rounded-xl"
-          >
-            <Text className="text-earth-500 text-sm font-medium">DEV: Mock 로그인</Text>
-          </Pressable>
+          <View className="items-center mt-8">
+            <Pressable
+              testID="login-mock-button"
+              onPress={handleMockLogin}
+              className="px-4 py-2 bg-earth-200 rounded-xl"
+            >
+              <Text className="text-earth-500 text-sm font-medium">DEV: Mock 로그인</Text>
+            </Pressable>
+            <Text className="text-earth-400 text-xs mt-1 text-center">테스트용 가짜 계정으로 로그인합니다</Text>
+          </View>
         )}
       </View>
     </SafeAreaView>

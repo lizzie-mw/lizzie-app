@@ -61,6 +61,7 @@ export function ChatListItem({ chat, onPress, onDelete }: ChatListItemProps) {
       ref={swipeableRef}
       renderRightActions={renderRightActions}
       overshootRight={false}
+      onSwipeableOpen={() => haptics.light()}
     >
       <Pressable
         className="flex-row items-center px-4 py-4 bg-white active:bg-cream-100"
@@ -81,7 +82,7 @@ export function ChatListItem({ chat, onPress, onDelete }: ChatListItemProps) {
             )}
           </View>
           <Text className="text-sm text-earth-500 mt-0.5">
-            메시지 {chat.message_count}개
+            {chat.message_count === 0 ? '새 대화' : `메시지 ${chat.message_count}개`}
           </Text>
         </View>
         <Icon name="chevron-forward" size="sm" color="#c9b69e" />

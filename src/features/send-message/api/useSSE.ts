@@ -18,6 +18,7 @@ interface UseSSEReturn {
   streamingText: string;
   error: Error | null;
   cancel: () => void;
+  retry: () => void;
 }
 
 export function useSSE(chatId: string, options: UseSSEOptions = {}): UseSSEReturn {
@@ -31,6 +32,7 @@ export function useSSE(chatId: string, options: UseSSEOptions = {}): UseSSERetur
   const eventSourceRef = useRef<EventSource | null>(null);
   const retryCountRef = useRef(0);
   const isMountedRef = useRef(true);
+  const lastContentRef = useRef<string | null>(null);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -53,6 +55,7 @@ export function useSSE(chatId: string, options: UseSSEOptions = {}): UseSSERetur
     async (content: string) => {
       if (isStreaming) return;
 
+      lastContentRef.current = content;
       setIsStreaming(true);
       setStreamingText('');
       setError(null);
@@ -140,11 +143,18 @@ export function useSSE(chatId: string, options: UseSSEOptions = {}): UseSSERetur
     [chatId, isStreaming, maxRetries, onComplete, onError, queryClient]
   );
 
+  const retry = useCallback(() => {
+    if (lastContentRef.current) {
+      sendMessage(lastContentRef.current);
+    }
+  }, [sendMessage]);
+
   return {
     sendMessage,
     isStreaming,
     streamingText,
     error,
     cancel,
+    retry,
   };
 }

@@ -23,6 +23,14 @@ export default function OnboardingScreen() {
           onPress={handleBack}
         />
       </View>
+
+      {/* Progress Bar */}
+      <View className="px-6 pb-2">
+        <View className="h-1 bg-gray-200 rounded-full">
+          <View className="h-1 bg-primary-500 rounded-full w-full" />
+        </View>
+      </View>
+
       <LizardForm />
     </SafeAreaView>
   );

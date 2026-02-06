@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native';
 import { Image } from 'expo-image';
+import { useState } from 'react';
 
 type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -17,16 +18,18 @@ const sizeStyles: Record<AvatarSize, { container: string; text: string; pixels: 
 };
 
 export function Avatar({ uri, name, size = 'md' }: AvatarProps) {
+  const [hasError, setHasError] = useState(false);
   const styles = sizeStyles[size];
   const initial = name?.charAt(0).toUpperCase() || '🦎';
 
-  if (uri) {
+  if (uri && !hasError) {
     return (
       <Image
         source={{ uri }}
         className={`${styles.container} rounded-full bg-gray-200`}
         contentFit="cover"
         transition={200}
+        onError={() => setHasError(true)}
       />
     );
   }
