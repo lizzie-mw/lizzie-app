@@ -1,8 +1,8 @@
-import { useCallback, useRef, useMemo } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform, View, Text, Pressable } from 'react-native';
+import { useCallback, useRef, useMemo, useState } from 'react';
+import { FlatList, KeyboardAvoidingView, Platform, View, Text, Pressable, RefreshControl } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useQuery } from '@tanstack/react-query';
-import { messageQueries, ChatBubble, TypingIndicator, toDisplayMessage } from '@/entities/message';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { messageQueries, messageKeys, ChatBubble, TypingIndicator, toDisplayMessage } from '@/entities/message';
 import type { DisplayMessage } from '@/entities/message';
 import { useSSE, ChatInput } from '@/features/send-message';
 import { Loading, EmptyState, Icon } from '@/shared/ui';
@@ -13,9 +13,17 @@ interface ChatRoomProps {
 
 export function ChatRoom({ chatId }: ChatRoomProps) {
   const headerHeight = useHeaderHeight();
+  const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { data, isLoading } = useQuery(messageQueries.list(chatId));
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await queryClient.invalidateQueries({ queryKey: messageKeys.list(chatId) });
+    setIsRefreshing(false);
+  };
 
   const {
     sendMessage,
@@ -86,6 +94,13 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
         keyExtractor={keyExtractor}
         inverted
         keyboardDismissMode="on-drag"
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            tintColor="#5cb82f"
+          />
+        }
         contentContainerStyle={
           messages.length === 0
             ? { flex: 1, justifyContent: 'center' }

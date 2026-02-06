@@ -1,4 +1,5 @@
-import { View, FlatList, Text, Alert } from 'react-native';
+import { useState } from 'react';
+import { View, FlatList, Text, Alert, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -65,6 +66,15 @@ export default function HomeScreen() {
     deleteMutation.mutate(chatId);
   };
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    if (!lizard?.id) return;
+    setIsRefreshing(true);
+    await queryClient.invalidateQueries({ queryKey: chatKeys.list(lizard.id) });
+    setIsRefreshing(false);
+  };
+
   const handleSettingsPress = () => {
     router.push('/settings');
   };
@@ -119,6 +129,13 @@ export default function HomeScreen() {
                 />
               )}
               contentContainerStyle={{ paddingBottom: 100 }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefreshing}
+                  onRefresh={handleRefresh}
+                  tintColor="#5cb82f"
+                />
+              }
               ItemSeparatorComponent={() => (
                 <View className="h-px bg-cream-100 mx-4" />
               )}
