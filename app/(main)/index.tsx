@@ -23,15 +23,28 @@ export default function HomeScreen() {
 
   const deleteMutation = useMutation({
     mutationFn: chatApi.deleteChat,
-    onSuccess: () => {
+    onMutate: async (chatId) => {
+      if (!lizard?.id) return;
+      await queryClient.cancelQueries({ queryKey: chatKeys.list(lizard.id) });
+      const previous = queryClient.getQueryData(chatKeys.list(lizard.id));
+      queryClient.setQueryData(
+        chatKeys.list(lizard.id),
+        (old: typeof chats) => old?.filter((c) => c.id !== chatId),
+      );
       haptics.success();
+      return { previous };
+    },
+    onError: (error: Error, _chatId, context) => {
+      if (lizard?.id && context?.previous) {
+        queryClient.setQueryData(chatKeys.list(lizard.id), context.previous);
+      }
+      haptics.error();
+      Alert.alert('삭제 실패', error.message || '다시 시도해주세요.');
+    },
+    onSettled: () => {
       if (lizard?.id) {
         queryClient.invalidateQueries({ queryKey: chatKeys.list(lizard.id) });
       }
-    },
-    onError: (error: Error) => {
-      haptics.error();
-      Alert.alert('삭제 실패', error.message || '다시 시도해주세요.');
     },
   });
 
