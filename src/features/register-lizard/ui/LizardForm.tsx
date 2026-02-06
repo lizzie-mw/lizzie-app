@@ -38,6 +38,7 @@ export function LizardForm() {
       className="flex-1"
       contentContainerClassName="p-6"
       keyboardShouldPersistTaps="handled"
+      automaticallyAdjustKeyboardInsets
     >
       <Text className="text-2xl font-bold text-gray-900 mb-2">
         도마뱀 등록
