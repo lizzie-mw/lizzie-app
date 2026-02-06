@@ -2,9 +2,10 @@ import { useCallback, useRef, useMemo, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform, View, Text, Pressable, RefreshControl } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { messageQueries, messageKeys, ChatBubble, TypingIndicator, toDisplayMessage } from '@/entities/message';
+import { messageQueries, messageKeys, ChatBubble, TypingIndicator, DateSeparator, toDisplayMessage } from '@/entities/message';
 import type { DisplayMessage } from '@/entities/message';
 import { useSSE, ChatInput } from '@/features/send-message';
+import { isSameDay } from '@/shared/lib';
 import { Loading, EmptyState, Icon } from '@/shared/ui';
 
 interface ChatRoomProps {
@@ -68,8 +69,24 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: DisplayMessage }) => <ChatBubble message={item} />,
-    []
+    ({ item, index }: { item: DisplayMessage; index: number }) => {
+      const showDateSeparator = (() => {
+        if (!('created_at' in item)) return false;
+        const nextItem = messages[index + 1];
+        if (!nextItem || !('created_at' in nextItem)) return true;
+        return !isSameDay(item.created_at, nextItem.created_at);
+      })();
+
+      return (
+        <>
+          <ChatBubble message={item} />
+          {showDateSeparator && 'created_at' in item && (
+            <DateSeparator date={item.created_at} />
+          )}
+        </>
+      );
+    },
+    [messages]
   );
 
   const keyExtractor = useCallback(
