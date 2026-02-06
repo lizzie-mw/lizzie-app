@@ -1,6 +1,7 @@
 import { View, Text, Pressable, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Constants from 'expo-constants';
 import { useQuery } from '@tanstack/react-query';
 import { lizardQueries, LizardAvatar } from '@/entities/lizard';
 import { useAuthStore } from '@/features/auth';
@@ -124,7 +125,7 @@ export default function SettingsScreen() {
       {/* Version */}
       <View className="flex-1" />
       <Text className="text-center text-earth-400 text-xs pb-4">
-        꼬물톡 v1.0.0
+        꼬물톡 v{Constants.expoConfig?.version ?? '1.0.0'}
       </Text>
     </SafeAreaView>
   );

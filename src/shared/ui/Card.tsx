@@ -1,4 +1,4 @@
-import { View, type ViewProps } from 'react-native';
+import { View, Platform, type ViewProps } from 'react-native';
 import type { ReactNode } from 'react';
 
 type CardVariant = 'default' | 'gradient' | 'elevated';
@@ -36,6 +36,7 @@ export function Card({
         ${paddingStyles[padding]}
         ${className ?? ''}
       `}
+      style={variant === 'elevated' && Platform.OS === 'android' ? { elevation: 4 } : undefined}
       {...props}
     >
       {children}
