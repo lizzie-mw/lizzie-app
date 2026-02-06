@@ -85,6 +85,7 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         inverted
+        keyboardDismissMode="on-drag"
         contentContainerStyle={
           messages.length === 0
             ? { flex: 1, justifyContent: 'center' }
