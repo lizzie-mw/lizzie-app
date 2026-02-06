@@ -61,6 +61,7 @@ export function ChatListItem({ chat, onPress, onDelete }: ChatListItemProps) {
       ref={swipeableRef}
       renderRightActions={renderRightActions}
       overshootRight={false}
+      onSwipeableOpen={() => haptics.light()}
     >
       <Pressable
         className="flex-row items-center px-4 py-4 bg-white active:bg-cream-100"

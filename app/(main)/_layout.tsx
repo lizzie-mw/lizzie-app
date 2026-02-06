@@ -1,8 +1,12 @@
+import { View } from 'react-native';
 import { Stack } from 'expo-router';
+import { NetworkBanner } from '@/shared/ui';
 
 export default function MainLayout() {
   return (
-    <Stack>
+    <View style={{ flex: 1 }}>
+      <NetworkBanner />
+      <Stack>
       <Stack.Screen
         name="index"
         options={{
@@ -38,5 +42,6 @@ export default function MainLayout() {
         }}
       />
     </Stack>
+    </View>
   );
 }
