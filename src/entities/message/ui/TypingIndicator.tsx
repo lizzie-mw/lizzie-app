@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect, useMemo } from 'react';
 import { Icon } from '@/shared/ui';
+import { withParticle } from '@/shared/lib';
 
 interface TypingIndicatorProps {
   lizardName?: string;
@@ -60,7 +61,7 @@ export function TypingIndicator({ lizardName = '리치' }: TypingIndicatorProps)
           ))}
         </View>
         <Text className="text-xs text-earth-400 mt-1">
-          {lizardName}가 생각 중...
+          {lizardName}{withParticle(lizardName, '가', '이')} 생각 중...
         </Text>
       </View>
     </View>

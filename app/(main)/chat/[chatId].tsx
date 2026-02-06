@@ -3,6 +3,7 @@ import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { ChatRoom } from '@/widgets/chat-room';
 import { lizardQueries } from '@/entities/lizard';
+import { withParticle } from '@/shared/lib';
 
 export default function ChatScreen() {
   const { chatId } = useLocalSearchParams<{ chatId: string }>();
@@ -12,7 +13,7 @@ export default function ChatScreen() {
   useEffect(() => {
     if (lizard?.name) {
       navigation.setOptions({
-        title: `${lizard.name}와의 대화`,
+        title: `${lizard.name}${withParticle(lizard.name, '와', '과')}의 대화`,
       });
     }
   }, [lizard?.name, navigation]);
