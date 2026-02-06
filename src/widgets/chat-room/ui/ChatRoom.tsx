@@ -1,5 +1,6 @@
 import { useCallback, useRef, useMemo } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { useQuery } from '@tanstack/react-query';
 import { messageQueries, ChatBubble, TypingIndicator, toDisplayMessage } from '@/entities/message';
 import type { DisplayMessage } from '@/entities/message';
@@ -11,6 +12,7 @@ interface ChatRoomProps {
 }
 
 export function ChatRoom({ chatId }: ChatRoomProps) {
+  const headerHeight = useHeaderHeight();
   const flatListRef = useRef<FlatList>(null);
 
   const { data, isLoading } = useQuery(messageQueries.list(chatId));
@@ -73,7 +75,7 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
     <KeyboardAvoidingView
       className="flex-1 bg-white"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? headerHeight : 0}
     >
       <FlatList
         ref={flatListRef}

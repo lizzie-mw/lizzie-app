@@ -1,7 +1,7 @@
 import { View, FlatList, Text, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { lizardQueries } from '@/entities/lizard';
 import { chatQueries, chatKeys, chatApi, ChatListItem } from '@/entities/chat';
 import { NewChatButton } from '@/features/create-chat';
@@ -12,6 +12,7 @@ import { haptics } from '@/shared/lib';
 export default function HomeScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const insets = useSafeAreaInsets();
 
   const { data: lizard, isLoading: isLizardLoading } = useQuery(lizardQueries.me());
 
@@ -120,7 +121,7 @@ export default function HomeScreen() {
       </View>
 
       {/* FAB */}
-      <View className="absolute bottom-6 right-6">
+      <View className="absolute right-6" style={{ bottom: Math.max(insets.bottom, 24) }}>
         <NewChatButton
           lizardId={lizard.id}
           chatCount={chats?.length || 0}
