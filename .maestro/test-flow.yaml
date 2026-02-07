@@ -1,0 +1,9 @@
+appId: host.exp.Exponent
+---
+# Close dev menu by tapping X
+- tapOn:
+    point: "93%,34%"
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: ".*"
+    timeout: 3000

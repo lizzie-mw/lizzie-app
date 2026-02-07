@@ -1,0 +1,64 @@
+appId: app.lizzie
+---
+# 1. Fresh start - Login screen
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+- assertVisible:
+    id: "login-screen"
+- takeScreenshot: tour-01-login
+
+# 2. Mock login -> Home
+- tapOn:
+    id: "login-mock-button"
+- waitForAnimationToEnd
+- takeScreenshot: tour-02-home
+
+# 3. Dismiss any error alert
+- tapOn:
+    text: "OK"
+    optional: true
+- waitForAnimationToEnd
+- takeScreenshot: tour-03-home-clean
+
+# 4. Tap settings gear icon
+- tapOn:
+    point: "92%,6%"
+- waitForAnimationToEnd
+- tapOn:
+    text: "OK"
+    optional: true
+- takeScreenshot: tour-04-settings
+
+# 5. Go back to home
+- back
+- waitForAnimationToEnd
+- tapOn:
+    text: "OK"
+    optional: true
+- takeScreenshot: tour-05-back-home
+
+# 6. Tap lizard edit icon
+- tapOn:
+    point: "88%,16%"
+- waitForAnimationToEnd
+- tapOn:
+    text: "OK"
+    optional: true
+- takeScreenshot: tour-06-lizard-edit
+
+# 7. Go back
+- back
+- waitForAnimationToEnd
+- tapOn:
+    text: "OK"
+    optional: true
+
+# 8. Tap FAB (+) to create chat
+- tapOn:
+    point: "88%,93%"
+- waitForAnimationToEnd
+- tapOn:
+    text: "OK"
+    optional: true
+- takeScreenshot: tour-07-new-chat
