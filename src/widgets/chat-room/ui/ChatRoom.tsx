@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { messageQueries, messageKeys, ChatBubble, TypingIndicator, DateSeparator, toDisplayMessage } from '@/entities/message';
 import type { DisplayMessage } from '@/entities/message';
 import { useSSE, ChatInput } from '@/features/send-message';
+import { ChatLimitBanner, useIsLimitReached, useDailyUsageStore } from '@/features/rewarded-ad';
 import { isSameDay } from '@/shared/lib';
 import { Loading, EmptyState, Icon } from '@/shared/ui';
 
@@ -17,6 +18,9 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
   const queryClient = useQueryClient();
   const flatListRef = useRef<FlatList>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const isLimitReached = useIsLimitReached();
+  const incrementMessageCount = useDailyUsageStore((state) => state.incrementMessageCount);
 
   const { data, isLoading } = useQuery(messageQueries.list(chatId));
 
@@ -62,10 +66,10 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
 
   const handleSend = useCallback(
     (content: string) => {
-      // Optimistic update: 사용자 메시지 즉시 표시
+      incrementMessageCount();
       sendMessage(content);
     },
-    [sendMessage]
+    [sendMessage, incrementMessageCount]
   );
 
   const renderItem = useCallback(
@@ -148,7 +152,11 @@ export function ChatRoom({ chatId }: ChatRoomProps) {
         </View>
       )}
 
-      <ChatInput onSend={handleSend} disabled={isStreaming} />
+      {isLimitReached && !isStreaming ? (
+        <ChatLimitBanner />
+      ) : (
+        <ChatInput onSend={handleSend} disabled={isStreaming || isLimitReached} />
+      )}
     </KeyboardAvoidingView>
   );
 }

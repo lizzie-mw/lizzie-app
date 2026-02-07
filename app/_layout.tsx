@@ -2,9 +2,13 @@ import { useEffect } from 'react';
 import { Stack, useRouter, useRootNavigationState } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import mobileAds from 'react-native-google-mobile-ads';
 import * as Linking from 'expo-linking';
 import { AppProviders } from '@/app/providers';
 import '../global.css';
+
+// AdMob SDK 초기화
+mobileAds().initialize();
 
 export default function RootLayout() {
   const router = useRouter();
