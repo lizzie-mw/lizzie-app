@@ -18,6 +18,7 @@ interface SettingsItemProps {
   title: string;
   onPress: () => void;
   danger?: boolean;
+  testID?: string;
 }
 
 function SettingsItem({
@@ -27,9 +28,11 @@ function SettingsItem({
   title,
   onPress,
   danger,
+  testID,
 }: SettingsItemProps) {
   return (
     <Pressable
+      testID={testID}
       className="flex-row items-center px-4 py-4 bg-white active:bg-cream-50"
       onPress={() => {
         haptics.light();
@@ -100,6 +103,7 @@ export default function SettingsScreen() {
       {/* Settings Menu */}
       <View className="bg-white rounded-2xl mx-4 mb-4 overflow-hidden">
         <SettingsItem
+          testID="settings-lizard"
           icon="lizard"
           iconFamily="material"
           title="도마뱀 정보"
@@ -107,6 +111,7 @@ export default function SettingsScreen() {
         />
         <View className="h-px bg-cream-100 ml-16" />
         <SettingsItem
+          testID="settings-account"
           icon="person-circle-outline"
           title="계정"
           onPress={() => router.push('/settings/account')}

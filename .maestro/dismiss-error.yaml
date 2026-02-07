@@ -1,0 +1,5 @@
+appId: app.lizzie
+---
+- tapOn:
+    text: "Dismiss"
+- waitForAnimationToEnd

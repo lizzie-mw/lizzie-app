@@ -1,0 +1,29 @@
+appId: app.lizzie
+---
+# Home screen - tap FAB to create chat
+- tapOn:
+    point: "90%,92%"
+- waitForAnimationToEnd
+- takeScreenshot: ux-03-after-fab-tap
+
+# Wait and screenshot whatever happens
+- extendedWaitUntil:
+    visible: ".*"
+    timeout: 5000
+    optional: true
+- takeScreenshot: ux-04-chat-or-error
+
+# Go back if needed
+- back
+- waitForAnimationToEnd
+- takeScreenshot: ux-05-back-to-home
+
+# Tap settings icon
+- tapOn:
+    point: "92%,6%"
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: ".*"
+    timeout: 5000
+    optional: true
+- takeScreenshot: ux-06-settings

@@ -1,0 +1,18 @@
+appId: app.lizzie
+---
+# 1. Login Screen
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+- assertVisible:
+    id: "login-screen"
+- takeScreenshot: ux-01-login-screen
+
+# 2. Mock Login
+- tapOn:
+    id: "login-mock-button"
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "꼬물톡"
+    timeout: 10000
+- takeScreenshot: ux-02-after-mock-login
