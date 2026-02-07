@@ -1,0 +1,12 @@
+appId: app.lizzie
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+- assertVisible: "꼬물톡"
+- assertVisible: "Google로 계속하기"
+- assertVisible: "DEV: Mock 로그인"
+- takeScreenshot: ux-01-login
+- tapOn: "DEV: Mock 로그인"
+- waitForAnimationToEnd
+- takeScreenshot: ux-02-after-login

@@ -1,0 +1,59 @@
+appId: app.lizzie
+---
+# === 1. 로그인 화면 ===
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+      id: "login-screen"
+    timeout: 15000
+
+- takeScreenshot: ux-01-login-screen
+
+# === 2. Mock 로그인 ===
+- tapOn:
+    id: "login-mock-button"
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+      id: "home-screen"
+    timeout: 15000
+
+- takeScreenshot: ux-02-home-screen
+
+# === 3. 설정 화면 이동 ===
+- tapOn:
+    id: "settings-button"
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "설정"
+    timeout: 10000
+
+- takeScreenshot: ux-03-settings-screen
+
+# === 4. 도마뱀 정보 화면 ===
+- tapOn:
+    id: "settings-lizard"
+- waitForAnimationToEnd
+- takeScreenshot: ux-04-lizard-info
+
+# === 5. 뒤로 가기 (tap back button "설정") ===
+- tapOn: "설정"
+- waitForAnimationToEnd
+- takeScreenshot: ux-05-settings-back
+
+# === 6. 계정 화면 ===
+- tapOn:
+    id: "settings-account"
+- waitForAnimationToEnd
+- takeScreenshot: ux-06-account-screen
+
+# === 7. 뒤로 가기 ===
+- tapOn: "설정"
+- waitForAnimationToEnd
+
+# === 8. 홈으로 돌아가기 ===
+- tapOn: "뒤로"
+- waitForAnimationToEnd
+- takeScreenshot: ux-07-home-final
